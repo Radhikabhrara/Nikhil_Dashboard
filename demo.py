@@ -25,8 +25,7 @@ def fetch_data():
 
     return data
 def main():
-    st.write("Search Bar in Streamlit")
-
+    
     # Fetch data from the database
     data = fetch_data()
 
@@ -35,6 +34,8 @@ def main():
     st.dataframe(data)
 
     # Add a search bar
+    st.write("Search Bar in Streamlit")
+
     search_query = st.text_input("Search:", "")
 
     # Filter the data based on the search query
