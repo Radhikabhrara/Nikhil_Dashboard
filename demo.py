@@ -13,6 +13,56 @@ hide_default_format = """
        """
 st.markdown(hide_default_format, unsafe_allow_html=True)
 
+def fetch_data():
+    # Fetch data from the PostgreSQL database using Pandas
+    # Replace the following line with your database query
+    data = pd.DataFrame({
+        'Column1': [1, 2, 3, 4, 5],
+        'Column2': ['A', 'B', 'C', 'D', 'E'],
+    })
+
+    return data
+
+def main():
+    st.title("Editable and Interactive Table with Streamlit")
+
+    # Fetch data from the database
+    data = fetch_data()
+
+    # Display the data in a Streamlit dataframe
+    st.write("Current Data:")
+    st.dataframe(data)
+
+if __name__ == "__main__":
+    main()
+def main():
+    st.title("Editable and Interactive Table with Streamlit")
+
+    # Fetch data from the database
+    data = fetch_data()
+
+    # Display the data in a Streamlit dataframe
+    st.write("Current Data:")
+    st.dataframe(data)
+
+    # Create an empty DataFrame to hold edited data
+    edited_data = pd.DataFrame(data.values, columns=data.columns)
+
+    # Edit the data in the Streamlit dataframe
+    for index, row in data.iterrows():
+        for col in data.columns:
+            edited_data.at[index, col] = st.text_input(f"Edit {col}:", value=row[col])
+
+    # If the user clicks the 'Submit' button, update the data
+    if st.button("Submit"):
+        # Here, you would implement the logic to update the PostgreSQL database with the edited data
+        # For this example, we'll just display the edited data
+        st.write("Edited Data:")
+        st.dataframe(edited_data)
+
+if __name__ == "__main__":
+    main()
+
 '''
 
 def create_connection():
