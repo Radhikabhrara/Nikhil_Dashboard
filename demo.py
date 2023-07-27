@@ -14,6 +14,7 @@ hide_default_format = """
        """
 st.markdown(hide_default_format, unsafe_allow_html=True)
 
+
 def fetch_data():
     # Fetch data from the PostgreSQL database using Pandas
     # Replace the following line with your database query
@@ -23,6 +24,28 @@ def fetch_data():
     })
 
     return data
+def main():
+    st.title("Search Bar in Streamlit")
+
+    # Fetch data from the database
+    data = fetch_data()
+
+    # Display the data in a Streamlit dataframe
+    st.write("Current Data:")
+    st.dataframe(data)
+
+    # Add a search bar
+    search_query = st.text_input("Search:", "")
+
+    # Filter the data based on the search query
+    if search_query:
+        filtered_data = data[data.apply(lambda row: search_query.lower() in row.to_string().lower(), axis=1)]
+        st.write("Filtered Data:")
+        st.dataframe(filtered_data)
+
+if __name__ == "__main__":
+    main()
+
 
 def main():
     st.title("Editable and Interactive Table with Streamlit")
