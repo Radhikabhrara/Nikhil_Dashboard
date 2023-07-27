@@ -25,7 +25,7 @@ def fetch_data():
 
     return data
 def main():
-    st.title("Search Bar in Streamlit")
+    st.write("Search Bar in Streamlit")
 
     # Fetch data from the database
     data = fetch_data()
@@ -46,19 +46,6 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-def main():
-    st.title("Editable and Interactive Table with Streamlit")
-
-    # Fetch data from the database
-    data = fetch_data()
-
-    # Display the data in a Streamlit dataframe
-    st.write("Current Data:")
-    st.dataframe(data)
-
-if __name__ == "__main__":
-    main()
 def main():
     st.title("Editable and Interactive Table with Streamlit")
 
