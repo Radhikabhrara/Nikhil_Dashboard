@@ -31,7 +31,22 @@ def main():
 
     # Display the data in a Streamlit dataframe
     st.write("Current Data:")
-    st.dataframe(data)
+    st.write("Choose data view:- ")
+    
+    # Create a list of options for the dropdown
+    options = ["See whole data", "Data head", "Data tail"]
+    
+    # Get the selected option from the user using selectbox
+    selected_option = st.selectbox("Select an option:", options)
+    
+    # Display the selected option
+    if selected_option == "See whole data":
+           st.dataframe(data)
+    if selected_option == "Data head":
+           st.dataframe(data.head())
+    if selected_option == "Data tail":
+           st.dataframe(data.tail())
+           
 
     # Add a search bar
     st.write("Search Bar in Streamlit")
