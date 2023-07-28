@@ -59,14 +59,15 @@ def main():
 
     # Create an empty DataFrame to hold edited data
     edited_data = pd.DataFrame(data.values, columns=data.columns)
-    user_input = st.number_input("Select row:", step=1, value=0, format="%d")
+    user_input = st.number_input("Select row / index :", step=1, value=0, format="%d")
     # Display the result
     st.write(f"You entered: {user_input}")
 
     # Edit the data in the Streamlit dataframe
     for index, row in data.iterrows():
-        for col in data.columns:
-               edited_data.at[index, col] = st.text_input(f"Edit {col}:", value=row[col])
+       if index ==user_input:
+              for col in data.columns:
+                     edited_data.at[index, col] = st.text_input(f"Edit {col}:", value=row[col])
 
     # If the user clicks the 'Submit' button, update the data
     if st.button("Submit"):
