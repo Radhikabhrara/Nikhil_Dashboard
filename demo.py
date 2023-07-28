@@ -30,11 +30,10 @@ def main():
     data = fetch_data()
 
     # Display the data in a Streamlit dataframe
-    st.write("Current Data:")
     st.write("Choose data view:- ")
     
     # Create a list of options for the dropdown
-    options = ["See whole data", "Data head", "Data tail"]
+    options = ["Choose from dropdown","See whole data", "Data head", "Data tail"]
     
     # Get the selected option from the user using selectbox
     selected_option = st.selectbox("Select an option:", options)
