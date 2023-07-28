@@ -19,8 +19,8 @@ def fetch_data():
     # Fetch data from the PostgreSQL database using Pandas
     # Replace the following line with your database query
     data = pd.DataFrame({
-        'Column1': [1, 2, 3, 4, 5],
-        'Column2': ['A', 'B', 'C', 'D', 'E'],
+        'Column1': [1, 2, 3, 4, 5, 6, 7, 8, 7, 2],
+        'Column2': ['A', 'B', 'C', 'D', 'E' ,'F' ,'G','H' ,'d' ,'A'],
     })
 
     return data
