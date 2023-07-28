@@ -67,10 +67,6 @@ def main():
     # Fetch data from the database
     data = fetch_data()
 
-    # Display the data in a Streamlit dataframe
-    st.write("Current Data:")
-    st.dataframe(data)
-
     # Create an empty DataFrame to hold edited data
     edited_data = pd.DataFrame(data.values, columns=data.columns)
     user_input = st.number_input("Select row / index :", step=1, value=0, format="%d")
