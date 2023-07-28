@@ -66,8 +66,7 @@ def main():
     # Edit the data in the Streamlit dataframe
     for index, row in data.iterrows():
         for col in data.columns:
-               if col == user_input:
-                      edited_data.at[index, col] = st.text_input(f"Edit {col}:", value=row[col])
+               edited_data.at[index, col] = st.text_input(f"Edit {col}:", value=row[col])
 
     # If the user clicks the 'Submit' button, update the data
     if st.button("Submit"):
