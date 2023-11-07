@@ -25,7 +25,7 @@ def run_query(query):
 # Function to create a database connection
 def create_connection():
     db_config = {
-        host='new-db-1.advasmart.in',
+        'host': 'new-db-1.advasmart.in',
         user='radhika-ro',
         password='sYkcHssQBbUwIuJ',
         port = 3366,
