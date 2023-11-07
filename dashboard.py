@@ -26,7 +26,7 @@ def run_query(query):
 
 # Example: Display a table from your database
 st.header('Sample Table from the Database')
-query = "SELECT * FROM your_table_name"
+query = "SELECT * FROM aggregate_daily_stats"
 table_data = run_query(query)
 
 if table_data:
