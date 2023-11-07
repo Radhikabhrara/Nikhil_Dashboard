@@ -25,7 +25,18 @@ def run_query(query):
         result = cursor.fetchall()
     return result
 
-# Example: Display a table from your database
+st.header('Sample Table from the Database')
+query = "SELECT * FROM aggregate_daily_stats"
+table_data = run_query(query)
+
+# Display the table data in a table format
+if table_data:
+    st.table(table_data)
+else:
+    st.warning('No data available for the selected table.')
+
+# Close the database connection
+conn.close()# Example: Display a table from your database
 st.header('Sample Table from the Database')
 query = "SELECT * FROM aggregate_daily_stats"
 table_data = run_query(query)
