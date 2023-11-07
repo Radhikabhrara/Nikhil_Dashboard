@@ -41,11 +41,12 @@ columns = get_column_names(table_name)
 
 # Display the table data with column names as headers
 if columns:
-    st.table(columns)  # Display column names as headers
     query = f"SELECT * FROM {table_name}"
     table_data = run_query(query)
     if table_data:
-        st.table(table_data)  # Display data
+        # Insert the column names as the first row of the data
+        table_data = [columns] + table_data
+        st.table(table_data)  # Display data with column names as headers
     else:
         st.warning('No data available for the selected table.')
 else:
