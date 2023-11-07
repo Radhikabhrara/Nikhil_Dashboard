@@ -7,7 +7,7 @@ def create_connection():
         host='new-db-1.advasmart.in',
         user='radhika-ro',
         password='sYkcHssQBbUwIuJ',
-        port ='3366',
+        port = 3366,
         db='advasmartdb'
     )
     return conn
