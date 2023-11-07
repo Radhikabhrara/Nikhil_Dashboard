@@ -26,10 +26,10 @@ def run_query(query):
 def create_connection():
     db_config = {
         'host': 'new-db-1.advasmart.in',
-        user='radhika-ro',
-        password='sYkcHssQBbUwIuJ',
-        port = 3366,
-        db='advasmartdb' # Replace with your MySQL server's port number
+        'user'='radhika-ro',
+        'password'='sYkcHssQBbUwIuJ',
+        'port' = 3366,
+        'db'='advasmartdb' # Replace with your MySQL server's port number
     }
     conn = pymysql.connect(**db_config)
     return conn
