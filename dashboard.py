@@ -21,6 +21,18 @@ def run_query(query):
     conn.close()
     return result
 
+# Function to create a database connection
+def create_connection():
+    db_config = {
+        host='new-db-1.advasmart.in',
+        user='radhika-ro',
+        password='sYkcHssQBbUwIuJ',
+        port = 3366,
+        db='advasmartdb'
+    }
+    conn = pymysql.connect(**db_config)
+    return conn
+
 # Streamlit App
 st.title('MySQL Database Dashboard')
 
@@ -44,6 +56,8 @@ if columns:
     query = f"SELECT * FROM {table_name}"
     table_data = run_query(query)
     if table_data:
+        # Convert tuples in table_data to lists
+        table_data = [list(row) for row in table_data]
         # Insert the column names as the first row of the data
         table_data = [columns] + table_data
         st.table(table_data)  # Display data with column names as headers
