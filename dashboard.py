@@ -26,25 +26,16 @@ def run_query(query):
     return result
 
 st.header('Sample Table from the Database')
+
 query = "SELECT * FROM aggregate_daily_stats"
 table_data = run_query(query)
 
-# Display the table data in a table format
+# Display the table data with column names as headers
 if table_data:
-    st.table(table_data)
+    st.table([column[0] for column in cursor.description])  # Display column names
+    st.table(table_data)  # Display data
 else:
     st.warning('No data available for the selected table.')
-
-# Close the database connection
-conn.close()# Example: Display a table from your database
-st.header('Sample Table from the Database')
-query = "SELECT * FROM aggregate_daily_stats"
-table_data = run_query(query)
-
-if table_data:
-    st.write(table_data)
-else:
-    st.write('No data to display.')
 
 # Close the database connection
 conn.close()
