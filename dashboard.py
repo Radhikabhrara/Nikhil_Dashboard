@@ -21,6 +21,7 @@ def run_query(query):
     conn.close()
     return result
 
+
 # Function to create a database connection
 def create_connection():
     db_config = {
@@ -28,7 +29,7 @@ def create_connection():
         user='radhika-ro',
         password='sYkcHssQBbUwIuJ',
         port = 3366,
-        db='advasmartdb'
+        db='advasmartdb' # Replace with your MySQL server's port number
     }
     conn = pymysql.connect(**db_config)
     return conn
