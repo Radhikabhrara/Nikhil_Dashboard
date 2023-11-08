@@ -72,7 +72,7 @@ if conn is not None:
 
     # Interactive Pie Chart
     st.write("### Interactive Pie Chart")
-    fig = px.pie(df, names="Client Name", values=["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"], title="Application Count")
+    fig = px.pie(df, names="Client Name", values=["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"], title="Application Count", values_sum=sum, hole=0.3)
     st.plotly_chart(fig)
 
     # Close the database connection
