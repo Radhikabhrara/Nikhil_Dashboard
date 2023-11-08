@@ -39,16 +39,28 @@ import streamlit as st
 import pandas as pd
 import sqlite3  # Replace with your database library
 
-# Function to retrieve data from the database
-def fetch_data(start_date, end_date):
-    # Replace this with your database connection and query
-    conn = sqlite3.connect("advasmartdb")
-    cursor = conn.cursor()
-    query = f"SELECT client_name ,stat_date,comp_app_count,approv_app_count ,yet_to_create_app_count,rejected_app_count FROM aggregate_daily_stats_as_on WHERE stat_date BETWEEN '{start_date}' AND '{end_date}'"
-    cursor.execute(query)
-    data = cursor.fetchall()
-    conn.close()
-    return data
+import sqlite3
+
+def fetch_data(start_date, end_date, db_path):
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        query = """
+            SELECT client_name, stat_date, comp_app_count, approv_app_count, yet_to_create_app_count, rejected_app_count
+            FROM aggregate_daily_stats_as_on
+            WHERE stat_date BETWEEN '{start_date}' AND '{end_date}'
+        """
+        cursor.execute(query, (start_date, end_date))
+        
+        data = cursor.fetchall()
+        
+        conn.close()
+        return data
+    except sqlite3.Error as e:
+        print("SQLite error:", e)
+        return None
+
 
 # Create a Streamlit app
 st.title("Dashboard")
