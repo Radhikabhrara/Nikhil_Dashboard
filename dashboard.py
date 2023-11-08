@@ -70,8 +70,14 @@ st.title("MySQL Database Dashboard")
 conn = create_connection()
 
 if conn is not None:
-    # Date Range Filter
+    st.sidebar.title("### Dashboard Menu")
+
+    # Dropdown to select data level (application, order, or both)
+    data_level = st.sidebar.selectbox("Select Data Level", ["Application", "Order", "Both"])   
+
     st.sidebar.write("### Date Range Filter")
+    # Date Range Filter
+    
     start_date = st.sidebar.date_input("Start Date")
     end_date = st.sidebar.date_input("End Date")
 
@@ -81,8 +87,7 @@ if conn is not None:
     if not end_date:
         end_date = pd.to_datetime("2023-12-31")
 
-    # Dropdown to select data level (application, order, or both)
-    data_level = st.sidebar.selectbox("Select Data Level", ["Application", "Order", "Both"])
+    
 
     # Checkbox to filter data
     filter_data = st.sidebar.checkbox("Filter Data")
