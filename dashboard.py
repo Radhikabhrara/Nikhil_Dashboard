@@ -1,27 +1,6 @@
 import streamlit as st
 import pymysql
 
-# Establish a connection to your MySQL database
-def create_connection():
-    conn = pymysql.connect(
-        host='new-db-1.advasmart.in',
-        user='radhika-ro',
-        password='sYkcHssQBbUwIuJ',
-        port = 3366,
-        db='advasmartdb'
-    )
-    return conn
-
-# Function to execute SQL queries
-def run_query(query):
-    conn = create_connection()
-    with conn.cursor() as cursor:
-        cursor.execute(query)
-        result = cursor.fetchall()
-    conn.close()
-    return result
-
-
 # Function to create a database connection
 def create_connection():
     db_config = {
@@ -33,6 +12,15 @@ def create_connection():
     }
     conn = pymysql.connect(**db_config)
     return conn
+
+# Function to execute SQL queries
+def run_query(query):
+    conn = create_connection()
+    with conn.cursor() as cursor:
+        cursor.execute(query)
+        result = cursor.fetchall()
+    conn.close()
+    return result
 
 # Streamlit App
 st.title('MySQL Database Dashboard')
