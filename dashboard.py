@@ -31,7 +31,6 @@ def create_connection():
         st.error(f"Error: Unable to connect to the database. {e}")
     return connection
 
-
 # Function to fetch application data from the MySQL database
 def fetch_application_data(start_date, end_date, connection):
     try:
@@ -82,22 +81,23 @@ if conn is not None:
     if not end_date:
         end_date = pd.to_datetime("2023-12-31")
 
-    # Checkbox to select data level (application, order, or both)
-    data_level_selection = st.sidebar.checkbox("Select Data Level")
-    application_level = False
-    order_level = False
+    # Dropdown to select data level (application, order, or both)
+    data_level = st.sidebar.selectbox("Select Data Level", ["Application", "Order", "Both"])
 
-    if data_level_selection:
-        application_level = st.sidebar.checkbox("Application Level", value=True)
-        order_level = st.sidebar.checkbox("Order Level", value=True)
+    # Checkbox to filter data
+    filter_data = st.sidebar.checkbox("Filter Data")
 
-    if application_level:
+    if data_level == "Application" or data_level == "Both":
         # Example: Display a table from your database - Application Level
         st.header('Application Level Data')
         application_data = fetch_application_data(start_date, end_date, conn)
 
         # Create a DataFrame for application data
         df_app = pd.DataFrame(application_data, columns=["Client Name", "Date", "Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"])
+
+        if filter_data:
+            # Filter data based on the checkbox
+            df_app = df_app[df_app['Client Name'] == st.sidebar.selectbox("Select Client", df_app['Client Name'].unique())]
 
         # Display the application data
         st.write("### Application Count Data")
@@ -114,13 +114,17 @@ if conn is not None:
         fig_app_pie = px.pie(df_app, names="Client Name", values="Values", title="Application Count")
         st.plotly_chart(fig_app_pie)
 
-    if order_level:
+    if data_level == "Order" or data_level == "Both":
         # Example: Display a table from your database - Order Level
         st.header('Order Level Data')
         order_data = fetch_order_data(start_date, end_date, conn)
 
         # Create a DataFrame for order data
         df_order = pd.DataFrame(order_data, columns=["Client Name", "Date", "Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"])
+
+        if filter_data:
+            # Filter data based on the checkbox
+            df_order = df_order[df_order['Client Name'] == st.sidebar.selectbox("Select Client", df_order['Client Name'].unique())]
 
         # Display the order data
         st.write("### Order Count Data")
@@ -141,4 +145,3 @@ if conn is not None:
     conn.close()
 else:
     st.error("Unable to connect to the database.")
-
