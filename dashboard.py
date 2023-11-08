@@ -62,7 +62,7 @@ end_date = st.sidebar.date_input("End Date")
 if not start_date:
     start_date = pd.to_datetime("2023-10-07")
 if not end_date:
-    end_date = pd.to_datetime("2023-12-31")
+    end_date = pd.to_datetime("2023-10-07")
 
 # Load data from the database based on the selected date range
 data = fetch_data(start_date, end_date)
