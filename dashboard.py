@@ -77,22 +77,6 @@ if not end_date:
 # Example: Display a table from your database
 st.header('Sample Table from the Database')
 
-
-
-# Create a Streamlit app
-st.title("Dashboard")
-
-# Date Range Filter
-st.sidebar.write("### Date Range Filter")
-start_date = st.sidebar.date_input("Start Date")
-end_date = st.sidebar.date_input("End Date")
-
-# Default date range for initial data display
-if not start_date:
-    start_date = pd.to_datetime("2023-10-07")
-if not end_date:
-    end_date = pd.to_datetime("2023-10-07")
-
 # Load data from the database based on the selected date range
 data = fetch_data(start_date, end_date)
 
