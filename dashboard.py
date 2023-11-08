@@ -70,9 +70,13 @@ if conn is not None:
     fig = px.bar(df, x="Client Name", y=["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"], title="Application Count")
     st.plotly_chart(fig)
 
-    # Interactive Pie Chart
-    st.write("### Interactive Pie Chart")
-    fig = px.pie(df, names="Client Name", values=["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"], title="Application Count", values_sum=sum, hole=0.3)
+    # Concatenate the values from multiple columns into a single 'Values' column
+    df['Values'] = df[['Completed Application', 'Approved Applications', 'Yet to Create Applications', 'Rejected Applications']].sum(axis=1)
+
+    # Create the pie chart using Plotly Express
+    fig = px.pie(df, names="Client Name", values="Values", title="Application Count")
+
+    # Display the chart using st.plotly_chart
     st.plotly_chart(fig)
 
     # Close the database connection
