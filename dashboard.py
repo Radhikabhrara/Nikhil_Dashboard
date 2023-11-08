@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.express as px
 
 
-st.set_page_config(page_title="AdvaInsight",layout="wide",initial_sidebar_state="auto")
+st.set_page_config(page_title="AdvaInsight",initial_sidebar_state="auto")
 # Add a logo and title using HTML
 
 
