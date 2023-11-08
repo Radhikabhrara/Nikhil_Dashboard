@@ -80,7 +80,8 @@ if conn is not None:
 
     st.sidebar.write("### Date Range Filter")
     # Date Range Filter
-    start_date, end_date = st.sidebar.slider("Select Date Range", pd.to_datetime("2023-01-01"), pd.to_datetime("2023-12-31"), (pd.to_datetime("2023-01-01"), pd.to_datetime("2023-12-31")))
+    start_date = st.sidebar.slider("Start Date", pd.to_datetime("2023-01-01"), pd.to_datetime("2023-12-31"), pd.to_datetime("2023-01-01"))
+    end_date = st.sidebar.slider("End Date", pd.to_datetime("2023-01-01"), pd.to_datetime("2023-12-31"), pd.to_datetime("2023-12-31"))
     #start_date = st.sidebar.date_input("Start Date")
     #end_date = st.sidebar.date_input("End Date")
 
