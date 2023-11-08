@@ -32,16 +32,6 @@ conn = create_connection()
 
 
 
-# Function to retrieve data from the database
-def fetch_data():
-    # Replace this with your database connection and query
-    conn = sqlite3.connect("advasmartdb")
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM order_counts")
-    data = cursor.fetchall()
-    conn.close()
-    return data
-
 # Example: Display a table from your database
 st.header('Sample Table from the Database')
 
