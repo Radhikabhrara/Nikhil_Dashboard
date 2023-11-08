@@ -66,10 +66,11 @@ if conn is not None:
     st.dataframe(df)
 
     # Interactive Bar Chart
-    st.write("### Interactive Bar Chart")
+    st.write("### Application level Bar Chart")
     fig = px.bar(df, x="Client Name", y=["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"], title="Application Count")
     st.plotly_chart(fig)
 
+    st.write("### Client level Pie Chart")
     # Concatenate the values from multiple columns into a single 'Values' column
     df['Values'] = df[['Completed Application', 'Approved Applications', 'Yet to Create Applications', 'Rejected Applications']].sum(axis=1)
 
