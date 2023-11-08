@@ -30,32 +30,72 @@ st.title('MySQL Database Dashboard')
 # Connect to the database
 conn = create_connection()
 
-# Fetch column names from the database
-def get_column_names(table_name):
-    with conn.cursor() as cursor:
-        cursor.execute(f"DESCRIBE {table_name}")
-        columns = [row[0] for row in cursor.fetchall()]
-    return columns
+
+
+# Function to retrieve data from the database
+def fetch_data():
+    # Replace this with your database connection and query
+    conn = sqlite3.connect("advasmartdb")
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM order_counts")
+    data = cursor.fetchall()
+    conn.close()
+    return data
+
+# Create a Streamlit app
+st.title("Order Count Dashboard")
 
 # Example: Display a table from your database
 st.header('Sample Table from the Database')
 table_name = 'aggregate_daily_stats'  # Replace with the table name you want to display
 columns = get_column_names(table_name)
+import streamlit as st
+import pandas as pd
+import sqlite3  # Replace with your database library
 
-# Display the table data with column names as headers
-if columns:
-    query = f"SELECT * FROM {table_name}"
-    table_data = run_query(query)
-    if table_data:
-        # Convert tuples in table_data to lists
-        table_data = [list(row) for row in table_data]
-        # Insert the column names as the first row of the data
-        table_data = [columns] + table_data
-        st.table(table_data)  # Display data with column names as headers
-    else:
-        st.warning('No data available for the selected table.')
-else:
-    st.warning('No columns available for the selected table.')
+# Function to retrieve data from the database
+def fetch_data(start_date, end_date):
+    # Replace this with your database connection and query
+    conn = sqlite3.connect("your_database.db")
+    cursor = conn.cursor()
+    query = f"SELECT client_name ,stat_date,comp_app_count,approv_app_count ,yet_to_create_app_count,rejected_app_count FROM aggregate_daily_stats_as_on WHERE stat_date BETWEEN '{start_date}' AND '{end_date}'"
+    cursor.execute(query)
+    data = cursor.fetchall()
+    conn.close()
+    return data
 
+# Create a Streamlit app
+st.title("Order Count Dashboard")
+
+# Date Range Filter
+st.sidebar.write("### Date Range Filter")
+start_date = st.sidebar.date_input("Start Date")
+end_date = st.sidebar.date_input("End Date")
+
+# Default date range for initial data display
+if not start_date:
+    start_date = pd.to_datetime("2023-10-07")
+if not end_date:
+    end_date = pd.to_datetime("2023-12-31")
+
+# Load data from the database based on the selected date range
+data = fetch_data(start_date, end_date)
+
+# Create a DataFrame from the data
+df = pd.DataFrame(data, columns=["Client Name", "Date", "Completed Application" ,"Appproved Applications" ,"Yet to create Appplications", "Rejcted Applications"])
+
+# Display the data
+st.write("### Application Count Data")
+st.dataframe(df)
+
+# Create a bar chart to visualize the data
+st.write("### Application Count Bar Chart")
+st.bar_chart(df)
+
+# Create a pie chart to visualize the data distribution
+st.write("### Application Count Pie Chart")
+st.plotly_chart(df.plot.pie(subplots=True, autopct="%1.1f%%", legend=False, labels=df.index))
+
+# Run the app with 'streamlit run
 # Close the database connection
 conn.close()
