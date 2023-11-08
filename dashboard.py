@@ -81,19 +81,22 @@ st.header('Sample Table from the Database')
 data = fetch_data(start_date, end_date)
 
 # Create a DataFrame from the data
-df = pd.DataFrame(data, columns=["Client Name", "Date", "Completed Application" ,"Appproved Applications" ,"Yet to create Appplications", "Rejcted Applications"])
+df1 = pd.DataFrame(data, columns=["Client Name", "Date", "Completed Application" ,"Appproved Applications" ,"Yet to create Appplications", "Rejcted Applications"])
+
+df = pd.DataFrame(data, columns=[ "Completed Application" ,"Appproved Applications" ,"Yet to create Appplications", "Rejcted Applications"])
 
 # Display the data
 st.write("### Application Count Data")
-st.dataframe(df)
+st.dataframe(df1)
 
 # Create a bar chart to visualize the data
 st.write("### Application Count Bar Chart")
 st.bar_chart(df)
 
-# Create a pie chart to visualize the data distribution
-st.write("### Application Count Pie Chart")
-st.plotly_chart(df.plot.pie(subplots=True, autopct="%1.1f%%", legend=False, labels=df.index))
+st.write("### Order Count Pie Chart")
+fig, ax = plt.subplots()
+df.plot.pie(subplots=True, autopct="%1.1f%%", legend=False, labels=df.index, ax=ax)
+st.pyplot(fig)
 
 # Run the app with 'streamlit run
 # Close the database connection
