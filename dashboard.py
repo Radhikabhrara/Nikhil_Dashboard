@@ -70,7 +70,7 @@ st.title("MySQL Database Dashboard")
 conn = create_connection()
 
 if conn is not None:
-    st.sidebar.title("### Dashboard Menu")
+    st.sidebar.title("AdvaInsights")
 
     # Dropdown to select data level (application, order, or both)
     data_level = st.sidebar.selectbox("Select Data Level", ["","Application", "Order", "Both"])   
