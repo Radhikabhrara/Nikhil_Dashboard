@@ -31,6 +31,7 @@ def create_connection():
         st.error(f"Error: Unable to connect to the database. {e}")
     return connection
 
+
 # Function to fetch application data from the MySQL database
 def fetch_application_data(start_date, end_date, connection):
     try:
@@ -73,11 +74,10 @@ if conn is not None:
     st.sidebar.title("AdvaInsights")
 
     # Dropdown to select data level (application, order, or both)
-    data_level = st.sidebar.selectbox("Select Data Level", ["","Application", "Order", "Both"])   
+    data_level = st.sidebar.selectbox("Select Data Level", ["", "Application", "Order", "Both"])
 
     st.sidebar.write("### Date Range Filter")
     # Date Range Filter
-    
     start_date = st.sidebar.date_input("Start Date")
     end_date = st.sidebar.date_input("End Date")
 
@@ -87,7 +87,6 @@ if conn is not None:
     if not end_date:
         end_date = pd.to_datetime("2023-12-31")
 
-    
     st.sidebar.write("### Clent Wise Filter")
     # Checkbox to filter data
     filter_data = st.sidebar.checkbox("Filter Data")
@@ -102,7 +101,8 @@ if conn is not None:
 
         if filter_data:
             # Filter data based on the checkbox
-            df_app = df_app[df_app['Client Name'] == st.sidebar.selectbox("Select Client", df_app['Client Name'].unique())]
+            selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique())
+            df_app = df_app[df_app['Client Name'] == selected_client]
 
         # Display the application data
         st.write("### Application Count Data")
@@ -129,7 +129,8 @@ if conn is not None:
 
         if filter_data:
             # Filter data based on the checkbox
-            df_order = df_order[df_order['Client Name'] == st.sidebar.selectbox("Select Client", df_order['Client Name'].unique())]
+            selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique())
+            df_order = df_order[df_order['Client Name'] == selected_client]
 
         # Display the order data
         st.write("### Order Count Data")
