@@ -1,17 +1,19 @@
 import streamlit as st
 import pymysql
 
+
 # Function to create a database connection
 def create_connection():
     db_config = {
         'host': 'new-db-1.advasmart.in',
-        'user'='radhika-ro',
-        'password'='sYkcHssQBbUwIuJ',
-        'port' = 3366,
-        'db'='advasmartdb' # Replace with your MySQL server's port number
+        'user': 'radhika-ro',
+        'password': 'sYkcHssQBbUwIuJ',
+        'database': 'advasmartdb',
+        'port': 3366,  # Replace with your MySQL server's port number
     }
     conn = pymysql.connect(**db_config)
     return conn
+
 
 # Function to execute SQL queries
 def run_query(query):
