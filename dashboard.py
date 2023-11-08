@@ -73,7 +73,7 @@ if conn is not None:
     st.sidebar.title("### Dashboard Menu")
 
     # Dropdown to select data level (application, order, or both)
-    data_level = st.sidebar.selectbox("Select Data Level", ["Application", "Order", "Both"])   
+    data_level = st.sidebar.selectbox("Select Data Level", ["","Application", "Order", "Both"])   
 
     st.sidebar.write("### Date Range Filter")
     # Date Range Filter
