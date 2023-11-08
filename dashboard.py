@@ -42,13 +42,9 @@ def fetch_data():
     conn.close()
     return data
 
-# Create a Streamlit app
-st.title("Order Count Dashboard")
-
 # Example: Display a table from your database
 st.header('Sample Table from the Database')
-table_name = 'aggregate_daily_stats'  # Replace with the table name you want to display
-columns = get_column_names(table_name)
+
 import streamlit as st
 import pandas as pd
 import sqlite3  # Replace with your database library
