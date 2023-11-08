@@ -1,6 +1,7 @@
 import streamlit as st
 import pymysql
 import pandas as pd
+import plotly.express as px
 
 # Function to connect to the MySQL database
 def create_connection():
@@ -10,7 +11,7 @@ def create_connection():
             host='new-db-1.advasmart.in',
             user='radhika-ro',
             password='sYkcHssQBbUwIuJ',
-            port = 3366,
+            port=3366,
             db='advasmartdb'
         )
     except Exception as e:
@@ -64,9 +65,17 @@ if conn is not None:
     st.write("### Application Count Data")
     st.dataframe(df)
 
+    # Interactive Bar Chart
+    st.write("### Interactive Bar Chart")
+    fig = px.bar(df, x="Client Name", y=["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"], title="Application Count")
+    st.plotly_chart(fig)
+
+    # Interactive Pie Chart
+    st.write("### Interactive Pie Chart")
+    fig = px.pie(df, names="Client Name", values=["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"], title="Application Count")
+    st.plotly_chart(fig)
+
     # Close the database connection
     conn.close()
 else:
     st.error("Unable to connect to the database.")
-
-# Run the app with 'streamlit run'
