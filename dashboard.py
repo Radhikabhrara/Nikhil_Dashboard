@@ -1,93 +1,72 @@
 import streamlit as st
 import pymysql
-
-
-# Function to create a database connection
-def create_connection():
-    db_config = {
-        'host': 'new-db-1.advasmart.in',
-        'user': 'radhika-ro',
-        'password': 'sYkcHssQBbUwIuJ',
-        'database': 'advasmartdb',
-        'port': 3366,  # Replace with your MySQL server's port number
-    }
-    conn = pymysql.connect(**db_config)
-    return conn
-
-# Streamlit App
-st.title('MySQL Database Dashboard')
-
-# Connect to the database
-conn = create_connection()
-
-import streamlit as st
 import pandas as pd
-import sqlite3  # Replace with your database library
-from datetime import datetime
 
-def fetch_data(start_date, end_date, db_path= 'advasmartdb'):
+# Function to connect to the MySQL database
+def create_connection():
+    connection = None
     try:
-        # Format the dates in the ISO 8601 format (YYYY-MM-DD)
-        start_date = start_date.strftime("%Y-%m-%d")
-        end_date = end_date.strftime("%Y-%m-%d")
-        
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        query = """
-            SELECT client_name, stat_date, comp_app_count, approv_app_count, yet_to_create_app_count, rejected_app_count
-            FROM aggregate_daily_stats_as_on
-            WHERE stat_date BETWEEN '{start_date}' AND '{end_date}'
-        """
-        cursor.execute(query, (start_date, end_date))
-        
-        data = cursor.fetchall()
-        
-        conn.close()
-        return data
-    except sqlite3.Error as e:
-        print("SQLite error:", e)
-        return None
+        connection = pymysql.connect(
+            host='new-db-1.advasmart.in',
+            user='radhika-ro',
+            password='sYkcHssQBbUwIuJ',
+            port = 3366,
+            db='advasmartdb'
+        )
+    except Exception as e:
+        st.error(f"Error: Unable to connect to the database. {e}")
+    return connection
 
+# Function to fetch data from the MySQL database
+def fetch_data(start_date, end_date, connection):
+    try:
+        with connection.cursor() as cursor:
+            query = f"""
+                SELECT client_name, stat_date, comp_app_count, approv_app_count, yet_to_create_app_count, rejected_app_count
+                FROM aggregate_daily_stats_as_on
+                WHERE stat_date BETWEEN %s AND %s
+            """
+            cursor.execute(query, (start_date, end_date))
+            data = cursor.fetchall()
+        return data
+    except Exception as e:
+        st.error(f"Error: Unable to fetch data from the database. {e}")
+        return []
 
 # Create a Streamlit app
-st.title("Order Count Dashboard")
+st.title("MySQL Database Dashboard")
 
-# Date Range Filter
-st.sidebar.write("### Date Range Filter")
-start_date = st.sidebar.date_input("Start Date")
-end_date = st.sidebar.date_input("End Date")
+# Connect to the MySQL database
+conn = create_connection()
 
-# Default date range for initial data display
-if not start_date:
-    start_date = pd.to_datetime("2023-10-07")
-if not end_date:
-    end_date = pd.to_datetime("2023-12-31")
+if conn is not None:
+    # Date Range Filter
+    st.sidebar.write("### Date Range Filter")
+    start_date = st.sidebar.date_input("Start Date")
+    end_date = st.sidebar.date_input("End Date")
 
-# Example: Display a table from your database
-st.header('Sample Table from the Database')
+    # Default date range for initial data display
+    if not start_date:
+        start_date = pd.to_datetime("2023-10-07")
+    if not end_date:
+        end_date = pd.to_datetime("2023-12-31")
 
-# Load data from the database based on the selected date range
-data = fetch_data(start_date, end_date)
+    # Example: Display a table from your database
+    st.header('Sample Table from the Database')
 
-# Create a DataFrame from the data
-df1 = pd.DataFrame(data, columns=["Client Name", "Date", "Completed Application" ,"Appproved Applications" ,"Yet to create Appplications", "Rejcted Applications"])
+    # Load data from the database based on the selected date range
+    data = fetch_data(start_date, end_date, conn)
 
-df = pd.DataFrame(data, columns=[ "Completed Application" ,"Appproved Applications" ,"Yet to create Appplications", "Rejcted Applications"])
+    # Create a DataFrame from the data
+    df = pd.DataFrame(data, columns=["Client Name", "Date", "Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"])
 
-# Display the data
-st.write("### Application Count Data")
-st.dataframe(df1)
+    # Display the data
+    st.write("### Application Count Data")
+    st.dataframe(df)
 
-# Create a bar chart to visualize the data
-st.write("### Application Count Bar Chart")
-st.bar_chart(df)
+    # Close the database connection
+    conn.close()
+else:
+    st.error("Unable to connect to the database.")
 
-st.write("### Order Count Pie Chart")
-fig, ax = plt.subplots()
-df.plot.pie(subplots=True, autopct="%1.1f%%", legend=False, labels=df.index, ax=ax)
-st.pyplot(fig)
-
-# Run the app with 'streamlit run
-# Close the database connection
-conn.close()
+# Run the app with 'streamlit run'
