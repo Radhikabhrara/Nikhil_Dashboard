@@ -10,8 +10,8 @@ st.set_page_config(page_title="AdvaInsight",layout="wide",initial_sidebar_state=
 st.markdown(
     """
     <div style="display: flex; align-items: center;">
-        <img src="AdvaRiskLogo.png" alt="Logo" width="100">
-        <h1 style="margin: 0 0 0 10px;">AdvaInsight</h1>
+        <img src="AdvaRiskLogo.png" alt="Logo" >
+        <h1 style="margin: 0 0 0 10px;"></h1>
     </div>
     """,
     unsafe_allow_html=True
