@@ -88,7 +88,7 @@ if conn is not None:
     if not end_date:
         end_date = pd.to_datetime("2023-12-31")
 
-    st.sidebar.write("### Clent Wise Filter")
+    st.sidebar.write("### Client Wise Filter")
     # Checkbox to filter data
     filter_data = st.sidebar.checkbox("Filter Data")
 
