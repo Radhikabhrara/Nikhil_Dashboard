@@ -7,15 +7,7 @@ import plotly.express as px
 
 st.set_page_config(page_title="AdvaInsight",layout="wide",initial_sidebar_state="auto")
 # Add a logo and title using HTML
-st.markdown(
-    """
-    <div style="display: flex; align-items: center;">
-        <img src="AdvaRiskLogo.png" alt="Logo" >
-        <h1 style="margin: 0 0 0 10px;"></h1>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+
 
 
 hide_default_format = """
