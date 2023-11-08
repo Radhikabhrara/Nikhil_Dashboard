@@ -33,7 +33,6 @@ def create_connection():
         st.error(f"Error: Unable to connect to the database. {e}")
     return connection
 
-
 # Function to fetch application data from the MySQL database
 def fetch_application_data(start_date, end_date, connection):
     try:
@@ -80,9 +79,8 @@ if conn is not None:
 
     st.sidebar.write("### Date Range Filter")
     # Date Range Filter
-    
-    #start_date = st.sidebar.date_input("Start Date")
-    #end_date = st.sidebar.date_input("End Date")
+    start_date = st.sidebar.date_input("Start Date")
+    end_date = st.sidebar.date_input("End Date")
 
     # Default date range for initial data display
     if not start_date:
@@ -154,3 +152,4 @@ if conn is not None:
     conn.close()
 else:
     st.error("Unable to connect to the database.")
+
