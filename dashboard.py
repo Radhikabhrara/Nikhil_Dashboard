@@ -35,7 +35,7 @@ import pandas as pd
 import sqlite3  # Replace with your database library
 from datetime import datetime
 
-def fetch_data(start_date, end_date, db_path):
+def fetch_data(start_date, end_date, db_path= 'advasmartdb'):
     try:
         # Format the dates in the ISO 8601 format (YYYY-MM-DD)
         start_date = start_date.strftime("%Y-%m-%d")
