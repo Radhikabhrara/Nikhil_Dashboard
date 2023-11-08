@@ -70,7 +70,7 @@ end_date = st.sidebar.date_input("End Date")
 
 # Default date range for initial data display
 if not start_date:
-    start_date = pd.to_datetime("2023-01-01")
+    start_date = pd.to_datetime("2023-10-07")
 if not end_date:
     end_date = pd.to_datetime("2023-12-31")
 
