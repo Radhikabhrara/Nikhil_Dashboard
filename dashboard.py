@@ -65,7 +65,7 @@ def fetch_data(start_date, end_date):
     return data
 
 # Create a Streamlit app
-st.title("Order Count Dashboard")
+st.title("Dashboard")
 
 # Date Range Filter
 st.sidebar.write("### Date Range Filter")
