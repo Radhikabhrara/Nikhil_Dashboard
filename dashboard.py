@@ -14,16 +14,6 @@ def create_connection():
     conn = pymysql.connect(**db_config)
     return conn
 
-
-# Function to execute SQL queries
-def run_query(query):
-    conn = create_connection()
-    with conn.cursor() as cursor:
-        cursor.execute(query)
-        result = cursor.fetchall()
-    conn.close()
-    return result
-
 # Streamlit App
 st.title('MySQL Database Dashboard')
 
