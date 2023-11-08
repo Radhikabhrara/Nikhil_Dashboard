@@ -30,19 +30,17 @@ st.title('MySQL Database Dashboard')
 # Connect to the database
 conn = create_connection()
 
-
-
-# Example: Display a table from your database
-st.header('Sample Table from the Database')
-
 import streamlit as st
 import pandas as pd
 import sqlite3  # Replace with your database library
-
-import sqlite3
+from datetime import datetime
 
 def fetch_data(start_date, end_date, db_path):
     try:
+        # Format the dates in the ISO 8601 format (YYYY-MM-DD)
+        start_date = start_date.strftime("%Y-%m-%d")
+        end_date = end_date.strftime("%Y-%m-%d")
+        
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
@@ -60,6 +58,25 @@ def fetch_data(start_date, end_date, db_path):
     except sqlite3.Error as e:
         print("SQLite error:", e)
         return None
+
+
+# Create a Streamlit app
+st.title("Order Count Dashboard")
+
+# Date Range Filter
+st.sidebar.write("### Date Range Filter")
+start_date = st.sidebar.date_input("Start Date")
+end_date = st.sidebar.date_input("End Date")
+
+# Default date range for initial data display
+if not start_date:
+    start_date = pd.to_datetime("2023-01-01")
+if not end_date:
+    end_date = pd.to_datetime("2023-12-31")
+
+# Example: Display a table from your database
+st.header('Sample Table from the Database')
+
 
 
 # Create a Streamlit app
