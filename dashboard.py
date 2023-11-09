@@ -287,11 +287,11 @@ if conn is not None:
 
     elif page == "Generate Reports":
         # Options for data level selection
-        data_level_options = ["Application", "Order", "API", "All"]
+        data_level_options = ["","Application", "Order", "API", "All"]
         selected_data_level = st.selectbox("Select Data Level", data_level_options)
 
         # Options for time frame selection
-        time_frame_options = ["Weekly", "Monthly", "Quarterly"]
+        time_frame_options = ["","Weekly", "Monthly", "Quarterly"]
         selected_time_frame = st.selectbox("Select Time Frame", time_frame_options)
 
         st.write("### Date Range Filter")
@@ -307,7 +307,10 @@ if conn is not None:
             end_date = pd.to_datetime("2023-12-31")
 
         client_options = fetch_unique_clients(conn)
+        all_clients_option = "All Clients"
+        client_options.insert(0, all_clients_option)
         selected_client = st.selectbox("Select Client", client_options)
+        selected_client = None if selected_client == all_clients_option else selected_clien
 
         # Fetch comparison data for the selected client
         comparison_data = fetch_comparison_data(start_date, end_date, selected_data_level, selected_time_frame, selected_client, conn)
