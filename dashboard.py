@@ -168,8 +168,6 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
                 """
-             q
-
 
             if selected_client:
                 query += " AND client_name = %s"
