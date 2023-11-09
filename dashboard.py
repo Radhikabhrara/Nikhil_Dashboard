@@ -230,7 +230,7 @@ if conn is not None:
 
   
 
-        st.write("**🚀 Exciting Updates:**")
+        st.title("**🚀 Exciting Updates:**")
         st.write("- Stay tuned for more features and enhancements!")
 
     elif page == "Customized Insights":
