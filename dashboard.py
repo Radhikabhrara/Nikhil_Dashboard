@@ -261,7 +261,7 @@ if conn is not None:
 
             if filter_data:
                 # Filter data based on the checkbox
-                selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique())
+                selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique(), key="unique_key_for_selectbox")
                 df_app = df_app[df_app['Client Name'] == selected_client]
 
             # Display the application data
@@ -289,7 +289,7 @@ if conn is not None:
 
             if filter_data:
                 # Filter data based on the checkbox
-                selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique())
+                selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique(), key="unique_key_for_selectbox")
                 df_order = df_order[df_order['Client Name'] == selected_client]
 
             # Display the order data
@@ -316,7 +316,7 @@ if conn is not None:
 
             if filter_data:
                 # Filter data based on the checkbox
-                selected_client = st.sidebar.selectbox("Select Client", df_api['Client Name'].unique())
+                selected_client = st.sidebar.selectbox("Select Client", df_api['Client Name'].unique(), key="unique_key_for_selectbox")
                 df_api = df_api[df_api['Client Name'] == selected_client]
 
             # Display the API data
