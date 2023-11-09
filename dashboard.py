@@ -154,7 +154,7 @@ if conn is not None:
 
     elif page == "Customized Insights":
         # Dropdown to select data level (application, order, or both)
-        data_level = st.sidebar.selectbox("Select Data Level", ["","API", "Application", "Order","ALL"])
+        data_level = st.sidebar.selectbox("Select Data Level", ["", "Application", "Order","API","ALL"])
 
         st.sidebar.write("### Date Range Filter")
 
@@ -199,7 +199,7 @@ if conn is not None:
             st.plotly_chart(fig_app_pie)
 
            
-        if data_level == "Order" or data_level == "Both":
+        if data_level == "Order" or data_level == "ALL":
             # Example: Display a table from your database - Order Level
             st.header('Order Level Data')
             order_data = fetch_order_data(start_date, end_date, conn)
