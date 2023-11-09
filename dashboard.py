@@ -231,8 +231,8 @@ if conn is not None:
 
   
 
-       st.write("**🚀 Exciting Updates:**")
-       st.write("- Stay tuned for more features and enhancements!")
+        st.write("**🚀 Exciting Updates:**")
+        st.write("- Stay tuned for more features and enhancements!")
 
     elif page == "Customized Insights":
         # Dropdown to select data level (application, order, or both)
