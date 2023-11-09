@@ -390,7 +390,7 @@ if conn is not None:
 
         # Interactive Line Chart for Comparison
         st.write(f"### {selected_time_frame} Comparison")
-        fig_comparison = px.line(df_comparison, x="Stat Date", y=columns[1:], title=f"{selected_data_level} {selected_time_frame} Comparison")
+        fig_comparison = px.line(df_comparison, x="Stat Date", y=columns[2:], title=f"{selected_data_level} {selected_time_frame} Comparison")
         st.plotly_chart(fig_comparison)
 
     # Close the database connection
