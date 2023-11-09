@@ -198,6 +198,34 @@ if conn is not None:
             fig_app_pie = px.pie(df_app, names="Client Name", values="Values", title="Application Count")
             st.plotly_chart(fig_app_pie)
 
+           
+        if data_level == "Order" or data_level == "Both":
+            # Example: Display a table from your database - Order Level
+            st.header('Order Level Data')
+            order_data = fetch_order_data(start_date, end_date, conn)
+
+            # Create a DataFrame for order data
+            df_order = pd.DataFrame(order_data, columns=["Client Name", "Date", "Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"])
+
+            if filter_data:
+                # Filter data based on the checkbox
+                selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique())
+                df_order = df_order[df_order['Client Name'] == selected_client]
+
+            # Display the order data
+            st.write("### Order Count Data")
+            st.dataframe(df_order)
+
+            # Interactive Bar Chart for Order Level
+            st.write("### Order level Bar Chart")
+            fig_order = px.bar(df_order, x="Client Name", y=["Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"], title="Order Count")
+            st.plotly_chart(fig_order)
+
+            # Create a pie chart using Plotly Express for Order Level
+            st.write("### Order level Pie Chart")
+            df_order['Values'] = df_order[['Manual Orders', 'Auto Orders', 'Remaining Orders', 'Total Orders']].sum(axis=1)
+            fig_order_pie = px.pie(df_order, names="Client Name", values
+
    
         if data_level == "API"or data_level == "ALL":
             st.header('API Level Data')
