@@ -362,7 +362,7 @@ if conn is not None:
         all_clients_option = "All Clients"
         client_options.insert(0, all_clients_option)
         selected_client = st.selectbox("Select Client", client_options)
-        selected_client = None if selected_client == all_clients_option else selected_clien
+        selected_client = None if selected_client == all_clients_option else selected_client
 
         # Fetch comparison data for the selected client
         comparison_data = fetch_comparison_data(start_date, end_date, selected_data_level, selected_time_frame, selected_client, conn)
