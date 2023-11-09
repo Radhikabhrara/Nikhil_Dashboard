@@ -121,29 +121,29 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
 
             if data_level == "Application":
                 query = f"""
-                    SELECT stat_date, client_name,
+                    SELECT stat_date
                           SUM(comp_app_count) as total_comp_app_count, 
                           SUM(approv_app_count) as total_approved_app_count,
                           SUM(yet_to_create_app_count) as total_yet_to_create_app_count,
                           SUM(rejected_app_count) as total_rejected_app_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY stat_date, client_name
+                    GROUP BY stat_date
                 """
             elif data_level == "Order":
                 query = f"""
-                    SELECT stat_date, 
+                    SELECT stat_date
                           SUM(man_order_count) as total_man_order_count, 
                           SUM(auto_order_count) as total_auto_order_count,
                           SUM(remain_order_count) as total_remain_order_count,
                           SUM(total_order_count) as total_total_order_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY stat_date
+                    GROUP BY stat_date 
                 """
             elif data_level == "API":
                 query = f"""
-                    SELECT stat_date, 
+                    SELECT stat_date
                           SUM(api_sucess_count) as total_api_success_count, 
                           SUM(api_failure_count) as total_api_failure_count,
                           SUM(api_error_count) as total_api_error_count,
@@ -169,7 +169,7 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                           SUM(api_total_count) as total_api_total_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY stat_date
+                    GROUP BY stat_date 
                 """
 
             if selected_client:
