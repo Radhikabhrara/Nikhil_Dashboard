@@ -177,31 +177,41 @@ else:
 
 
 
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 from datetime import timedelta
 
 # Function to generate reports
-def generate_reports(data, report_type, values_column):
-    if report_type == "Weekly":
-        data['Week'] = data['Date'].dt.strftime('%U')
-        grouped_data = data.groupby(['Client Name', 'Week']).sum().reset_index()
-    elif report_type == "Monthly":
-        data['Month'] = data['Date'].dt.strftime('%Y-%m')
-        grouped_data = data.groupby(['Client Name', 'Month']).sum().reset_index()
-    elif report_type == "Quarterly":
-        data['Quarter'] = data['Date'].dt.to_period("Q")
-        grouped_data = data.groupby(['Client Name', 'Quarter']).sum().reset_index()
+def generate_time_based_reports(data, time_column, values_column):
+    data[time_column] = pd.to_datetime(data[time_column])
+    
+    # Generate weekly, monthly, and quarterly reports
+    weekly_data = data.resample('W-Mon', on=time_column).sum().reset_index()
+    monthly_data = data.resample('M', on=time_column).sum().reset_index()
+    quarterly_data = data.resample('Q', on=time_column).sum().reset_index()
 
-    st.write(f"### {report_type} Report")
-    st.dataframe(grouped_data)
+    st.write("### Weekly Report")
+    st.dataframe(weekly_data)
 
-    # Interactive Bar Chart
-    st.write(f"### {report_type} Bar Chart")
-    fig = px.bar(grouped_data, x="Client Name", y=values_column, color=report_type, title=f"{report_type} Report")
-    st.plotly_chart(fig)
+    st.write("### Monthly Report")
+    st.dataframe(monthly_data)
+
+    st.write("### Quarterly Report")
+    st.dataframe(quarterly_data)
+
+    # Interactive Bar Charts
+    st.write("### Weekly Bar Chart")
+    fig_weekly = px.bar(weekly_data, x=time_column, y=values_column, title="Weekly Report")
+    st.plotly_chart(fig_weekly)
+
+    st.write("### Monthly Bar Chart")
+    fig_monthly = px.bar(monthly_data, x=time_column, y=values_column, title="Monthly Report")
+    st.plotly_chart(fig_monthly)
+
+    st.write("### Quarterly Bar Chart")
+    fig_quarterly = px.bar(quarterly_data, x=time_column, y=values_column, title="Quarterly Report")
+    st.plotly_chart(fig_quarterly)
 
 # ... (your existing code)
 
@@ -214,28 +224,26 @@ conn = create_connection()
 if conn is not None:
     # ... (your existing code)
 
-    # New Page: Generate Reports
-    if st.sidebar.button("Generate Reports"):
-        st.title("Generate Reports")
-
-        # Select report type
-        report_type = st.sidebar.selectbox("Select Report Type", ["Weekly", "Monthly", "Quarterly"])
+    # New Page: Generate Time-based Reports
+    if st.sidebar.button("Generate Time-based Reports"):
+        st.title("Generate Time-based Reports")
 
         if data_level == "Application" or data_level == "Both":
-            st.header('Generate Application Reports')
+            st.header('Generate Application Time-based Reports')
 
-            # Generate application reports
-            generate_reports(df_app, report_type, ["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"])
+            # Generate time-based application reports
+            generate_time_based_reports(df_app, "Date", ["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"])
 
         if data_level == "Order" or data_level == "Both":
-            st.header('Generate Order Reports')
+            st.header('Generate Order Time-based Reports')
 
-            # Generate order reports
-            generate_reports(df_order, report_type, ["Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"])
+            # Generate time-based order reports
+            generate_time_based_reports(df_order, "Date", ["Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"])
 
     # Close the database connection
     conn.close()
 else:
     st.error("Unable to connect to the database.")
+
 
 
