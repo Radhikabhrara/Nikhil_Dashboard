@@ -171,7 +171,71 @@ if conn is not None:
         st.plotly_chart(fig_order_pie)
 
     # Close the database connection
+    #conn.close()
+else:
+    st.error("Unable to connect to the database.")
+
+
+
+
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+from datetime import timedelta
+
+# Function to generate reports
+def generate_reports(data, report_type, values_column):
+    if report_type == "Weekly":
+        data['Week'] = data['Date'].dt.strftime('%U')
+        grouped_data = data.groupby(['Client Name', 'Week']).sum().reset_index()
+    elif report_type == "Monthly":
+        data['Month'] = data['Date'].dt.strftime('%Y-%m')
+        grouped_data = data.groupby(['Client Name', 'Month']).sum().reset_index()
+    elif report_type == "Quarterly":
+        data['Quarter'] = data['Date'].dt.to_period("Q")
+        grouped_data = data.groupby(['Client Name', 'Quarter']).sum().reset_index()
+
+    st.write(f"### {report_type} Report")
+    st.dataframe(grouped_data)
+
+    # Interactive Bar Chart
+    st.write(f"### {report_type} Bar Chart")
+    fig = px.bar(grouped_data, x="Client Name", y=values_column, color=report_type, title=f"{report_type} Report")
+    st.plotly_chart(fig)
+
+# ... (your existing code)
+
+# Create a Streamlit app
+st.title("MySQL Database Dashboard")
+
+# Connect to the MySQL database
+conn = create_connection()
+
+if conn is not None:
+    # ... (your existing code)
+
+    # New Page: Generate Reports
+    if st.sidebar.button("Generate Reports"):
+        st.title("Generate Reports")
+
+        # Select report type
+        report_type = st.sidebar.selectbox("Select Report Type", ["Weekly", "Monthly", "Quarterly"])
+
+        if data_level == "Application" or data_level == "Both":
+            st.header('Generate Application Reports')
+
+            # Generate application reports
+            generate_reports(df_app, report_type, ["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"])
+
+        if data_level == "Order" or data_level == "Both":
+            st.header('Generate Order Reports')
+
+            # Generate order reports
+            generate_reports(df_order, report_type, ["Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"])
+
+    # Close the database connection
     conn.close()
 else:
     st.error("Unable to connect to the database.")
+
 
