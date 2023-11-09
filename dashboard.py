@@ -81,6 +81,17 @@ def fetch_api_data(start_date, end_date, connection):
         st.error(f"Error: Unable to fetch application data from the database. {e}")
         return []
 
+def fetch_unique_clients(connection):
+    try:
+        with connection.cursor() as cursor:
+            query = "SELECT DISTINCT client_name FROM your_table_name;"
+            cursor.execute(query)
+            clients = [row[0] for row in cursor.fetchall()]
+        return clients
+    except Exception as e:
+        st.error(f"Error: Unable to fetch unique clients from the database. {e}")
+        return []
+
 
 def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected_client, connection):
     try:
@@ -296,7 +307,8 @@ if conn is not None:
         if not end_date:
             end_date = pd.to_datetime("2023-12-31")
 
-        selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique())
+        client_options = fetch_unique_clients(conn)
+        selected_client = st.selectbox("Select Client", client_options)
 
         # Fetch comparison data for the selected client
         comparison_data = fetch_comparison_data(start_date, end_date, selected_data_level, selected_time_frame, selected_client, conn)
