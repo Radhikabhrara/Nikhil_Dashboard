@@ -194,11 +194,45 @@ conn = create_connection()
 
 if conn is not None:
     # Navigation menu with a default selection of "AdvaInsights"
-    st.sidebar.title("AdvaInsights Menu")
-    page = st.sidebar.radio("Navigation", ["AdvaInsights", "Customized Insights", "Generate Reports"], index=0)
+    st.title("**AdvaInsights Menu**")
+    page = st.radio("Navigation", ["AdvaInsights", "Customized Insights", "Generate Reports"], index=0)
 
     if page == "AdvaInsights":
-        st.write("Under construction")
+        st.write("**📊 AdvaInsights Overview:**")
+        st.write("*Under construction, exciting updates coming soon!*")
+
+  
+        st.title("**🎨 Customized Insights**")
+        st.write("### Application Level Data:")
+        st.write("- Displays application data with filtering options.")
+        st.write("- Interactive bar and pie charts for a visual representation.")
+
+        st.write("### Order Level Data:")
+        st.write("- Exhibits order data with client-wise filtering.")
+        st.write("- Interactive bar and pie charts for a clear view.")
+
+        st.write("### API Level Data:")
+        st.write("- Showcases API data with flexible client-wise filtering.")
+        st.write("- Interactive bar and pie charts for effective analysis.")
+
+ 
+        st.title("**📅 Generate Reports**")
+        st.write("### Data Level & Time Frame Selection:")
+        st.write("- Choose between Application, Order, API, or All.")
+        st.write("- Select a time frame - Weekly, Monthly, or Quarterly.")
+
+        st.write("### Client Filtering:")
+        st.write("- Filter data by client, including an option for all clients.")
+        st.write("- Fetches and displays dynamic comparison data.")
+
+        st.write("### Comparison Data Display:")
+        st.write("- Presents data in tabular form.")
+        st.write("- Interactive line chart for a visual representation.")
+
+  
+
+       st.write("**🚀 Exciting Updates:**")
+       st.write("- Stay tuned for more features and enhancements!")
 
     elif page == "Customized Insights":
         # Dropdown to select data level (application, order, or both)
