@@ -79,41 +79,40 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, connecti
             if data_level == "Application":
                 query = f"""
                     SELECT stat_date, 
-                           SUM(comp_app_count) as total_comp_app_count, 
-                           SUM(approv_app_count) as total_approved_app_count,
-                           SUM(yet_to_create_app_count) as total_yet_to_create_app_count,
-                           SUM(rejected_app_count) as total_rejected_app_count
+                          SUM(comp_app_count) as total_comp_app_count, 
+                          SUM(approved_app_count) as total_approved_app_count,
+                          SUM(yet_to_create_app_count) as total_yet_to_create_app_count,
+                          SUM(rejected_app_count) as total_rejected_app_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY {group_by_clause};
+                    GROUP BY stat_date, {group_by_clause};
                 """
             elif data_level == "Order":
                 query = f"""
                     SELECT stat_date, 
-                           SUM(man_order_count) as total_man_order_count, 
-                           SUM(auto_order_count) as total_auto_order_count,
-                           SUM(remain_order_count) as total_remain_order_count,
-                           SUM(total_order_count) as total_total_order_count
+                          SUM(man_order_count) as total_man_order_count, 
+                          SUM(auto_order_count) as total_auto_order_count,
+                          SUM(remain_order_count) as total_remain_order_count,
+                          SUM(total_order_count) as total_total_order_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY {group_by_clause};
+                    GROUP BY stat_date, {group_by_clause};
                 """
             else:  # Both data levels
                 query = f"""
                     SELECT stat_date, 
-                           SUM(comp_app_count) as total_comp_app_count, 
-                           SUM(approved_app_count) as total_approved_app_count,
-                           SUM(yet_to_create_app_count) as total_yet_to_create_app_count,
-                           SUM(rejected_app_count) as total_rejected_app_count,
-                           SUM(man_order_count) as total_man_order_count, 
-                           SUM(auto_order_count) as total_auto_order_count,
-                           SUM(remain_order_count) as total_remain_order_count,
-                           SUM(total_order_count) as total_total_order_count
+                          SUM(comp_app_count) as total_comp_app_count, 
+                          SUM(approved_app_count) as total_approved_app_count,
+                          SUM(yet_to_create_app_count) as total_yet_to_create_app_count,
+                          SUM(rejected_app_count) as total_rejected_app_count,
+                          SUM(man_order_count) as total_man_order_count, 
+                          SUM(auto_order_count) as total_auto_order_count,
+                          SUM(remain_order_count) as total_remain_order_count,
+                          SUM(total_order_count) as total_total_order_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY {group_by_clause};
+                    GROUP BY stat_date, {group_by_clause};
                 """
-
             cursor.execute(query, (start_date, end_date))
             data = cursor.fetchall()
         return data
