@@ -115,6 +115,17 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, connecti
                     WHERE stat_date BETWEEN %s AND %s
                     GROUP BY stat_date, {group_by_clause};
                 """
+            elif data_level == "API":
+                query = f"""
+                    SELECT stat_date, 
+                          SUM(api_sucess_count) as total_api_success_count, 
+                          SUM(api_failure_count) as total_api_failure_count,
+                          SUM(api_error_count) as total_api_error_count,
+                          SUM(api_total_count) as total_api_total_count
+                    FROM aggregate_daily_stats_as_on
+                    WHERE stat_date BETWEEN %s AND %s
+                    GROUP BY stat_date, {group_by_clause};
+                """
             else:  # Both data levels
                 query = f"""
                     SELECT stat_date, 
@@ -125,7 +136,11 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, connecti
                           SUM(man_order_count) as total_man_order_count, 
                           SUM(auto_order_count) as total_auto_order_count,
                           SUM(remain_order_count) as total_remain_order_count,
-                          SUM(total_order_count) as total_total_order_count
+                          SUM(total_order_count) as total_total_order_count,
+                          SUM(api_sucess_count) as total_api_success_count, 
+                          SUM(api_failure_count) as total_api_failure_count,
+                          SUM(api_error_count) as total_api_error_count,
+                          SUM(api_total_count) as total_api_total_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
                     GROUP BY stat_date, {group_by_clause};
