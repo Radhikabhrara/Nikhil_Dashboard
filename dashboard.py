@@ -73,7 +73,7 @@ conn = create_connection()
 
 if conn is not None:
     # Navigation menu
-    page = st.sidebar.radio("Navigation", ["Customized Insights", "Generate Reports"])
+    page = st.sidebar.radio("Navigation", ["Customized Insights", "Generate Reports"], index=0))
 
     if page == "Customized Insights":
         st.sidebar.title("AdvaInsights Menu")
