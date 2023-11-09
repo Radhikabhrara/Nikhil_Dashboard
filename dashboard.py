@@ -168,11 +168,13 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
                 """
+             q
+
 
             if selected_client:
                 query += " AND client_name = %s"
 
-            query += f" GROUP BY stat_date, {group_by_clause};"
+            query += f" GROUP BY stat_date, client_name;"
 
             if selected_client:
                 cursor.execute(query, (start_date, end_date, selected_client))
