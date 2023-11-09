@@ -385,7 +385,7 @@ if conn is not None:
             ]
 
         # Create a DataFrame for comparison data
-        df_comparison = pd.DataFrame(comparison_data)
+        df_comparison = pd.DataFrame(comparison_data,column=columns)
 
         # Display the comparison data
         st.write("### Comparison Data")
