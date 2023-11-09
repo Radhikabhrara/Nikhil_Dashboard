@@ -394,6 +394,8 @@ if conn is not None:
         st.plotly_chart(fig_comparison)
         fig_comparison = px.bar(df_comparison, x="Stat Date", y=columns[2:], color="Client", barmode="group", title=f"{selected_data_level} {selected_time_frame} Comparison")
         st.plotly_chart(fig_comparison)
+        fig_comparison = px.bar(df_comparison, x="Stat Date", y=columns[2:], color="Client", barmode="group", title=f"{selected_data_level} {selected_time_frame} Comparison")
+        st.plotly_chart(fig_comparison)
         fig_comparison = px.area(df_comparison, x="Stat Date", y=columns[2:], color="Client", title=f"{selected_data_level} {selected_time_frame} Comparison")
         st.plotly_chart(fig_comparison)
 
