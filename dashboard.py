@@ -70,7 +70,7 @@ def fetch_api_data(start_date, end_date, connection):
     try:
         with connection.cursor() as cursor:
             query = """
-                SELECT client_name, stat_date, api_success_count, api_failure_count, api_error_count, api_total_count
+                SELECT client_name, stat_date, api_sucess_count, api_failure_count, api_error_count, api_total_count
                 FROM aggregate_daily_stats_as_on
                 WHERE stat_date BETWEEN %s AND %s
             """
