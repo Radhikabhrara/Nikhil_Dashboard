@@ -198,7 +198,6 @@ if conn is not None:
             fig_app_pie = px.pie(df_app, names="Client Name", values="Values", title="Application Count")
             st.plotly_chart(fig_app_pie)
 
-           
         if data_level == "Order" or data_level == "ALL":
             # Example: Display a table from your database - Order Level
             st.header('Order Level Data')
@@ -224,7 +223,8 @@ if conn is not None:
             # Create a pie chart using Plotly Express for Order Level
             st.write("### Order level Pie Chart")
             df_order['Values'] = df_order[['Manual Orders', 'Auto Orders', 'Remaining Orders', 'Total Orders']].sum(axis=1)
-            fig_order_pie = px.pie(df_order, names="Client Name", values
+            fig_order_pie = px.pie(df_order, names="Client Name", values="Values", title="Order Count")
+            st.plotly_chart(fig_order_pie)
 
         if data_level == "API" or data_level == "ALL":
             st.header('API Level Data')
@@ -252,14 +252,6 @@ if conn is not None:
             df_api['Values'] = df_api[['API Success count', 'API Failure count', 'API Error count', 'API Total count']].sum(axis=1)
             fig_api_pie = px.pie(df_api, names="Client Name", values="Values", title="API Count")
             st.plotly_chart(fig_api_pie)
-    
-
-            # Create a pie chart using Plotly Express for Order Level
-            st.write("### Order level Pie Chart")
-            df_order['Values'] = df_order[['Manual Orders', 'Auto Orders', 'Remaining Orders', 'Total Orders']].sum(axis=1)
-            fig_order_pie = px.pie(df_order, names="Client Name", values="Values", title="Order Count")
-            st.plotly_chart(fig_order_pie)
-
 
 
       
