@@ -392,7 +392,8 @@ if conn is not None:
         st.write(f"### {selected_time_frame} Comparison")
         fig_comparison = px.line(df_comparison, x="Stat Date", y=columns[2:], title=f"{selected_data_level} {selected_time_frame} Comparison")
         st.plotly_chart(fig_comparison)
-        fig_comparison = px.bar(df_comparison, x="Stat Date", y=columns[2:], color="Client", barmode="group", title=f"{selected_data_level} {selected_time_frame} Comparison")
+        # Assuming df_comparison is your DataFrame
+        fig_comparison = px.bar(df_comparison, x="Stat Date", y=columns[2:], barmode="group", title=f"{selected_data_level} {selected_time_frame} Comparison")
         st.plotly_chart(fig_comparison)
         fig_comparison = px.bar(df_comparison, x="Stat Date", y=columns[2:], color="Client", barmode="group", title=f"{selected_data_level} {selected_time_frame} Comparison")
         st.plotly_chart(fig_comparison)
