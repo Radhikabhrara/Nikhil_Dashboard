@@ -94,25 +94,6 @@ if conn is not None:
     # Checkbox to filter data
     filter_data = st.sidebar.checkbox("Filter Data")
 
-    # Preset filters
-    preset_filter = st.sidebar.selectbox("Preset Filters", ["", "Monthly", "Quarterly", "Weekly"])
-
-    if preset_filter == "Monthly":
-        end_date = end_date.replace(day=1) - timedelta(days=1)
-        start_date = end_date.replace(day=1)
-    elif preset_filter == "Quarterly":
-        end_date = end_date.replace(day=1) - timedelta(days=1)
-        if end_date.month in [1, 2, 3]:
-            start_date = end_date.replace(month=1, day=1)
-        elif end_date.month in [4, 5, 6]:
-            start_date = end_date.replace(month=4, day=1)
-        elif end_date.month in [7, 8, 9]:
-            start_date = end_date.replace(month=7, day=1)
-        else:
-            start_date = end_date.replace(month=10, day=1)
-    elif preset_filter == "Weekly":
-        end_date -= timedelta(days=end_date.weekday())
-        start_date = end_date - timedelta(days=6)
 
     if data_level == "Application" or data_level == "Both":
         # Example: Display a table from your database - Application Level
