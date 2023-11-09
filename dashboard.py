@@ -17,6 +17,22 @@ hide_default_format = """
        """
 st.markdown(hide_default_format, unsafe_allow_html=True)
 
+
+# Extend the layout to the whole page
+st.markdown("""
+    <style>
+        .reportview-container {
+            flex-direction: row;
+        }
+        header > .toolbar {
+            flex-direction: row;
+            left: 2rem;
+            right: auto;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+
 # Function to connect to the MySQL database
 def create_connection():
     connection = None
