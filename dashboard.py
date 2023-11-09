@@ -261,7 +261,10 @@ if conn is not None:
 
             if filter_data:
                 # Filter data based on the checkbox
-                selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique(), key="unique_key_for_selectbox")
+               widget_id = f"Select Client - {page}"
+               selected_client = st.sidebar.selectbox(widget_id, df_order['Client Name'].unique())
+
+                #selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique(), key="unique_key_for_selectbox")
                 df_app = df_app[df_app['Client Name'] == selected_client]
 
             # Display the application data
