@@ -111,6 +111,9 @@ def fetch_unique_clients(connection):
 def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected_client, connection):
     try:
         with connection.cursor() as cursor:
+            # Change SQL mode to allow for more flexibility in GROUP BY
+            cursor.execute("SET sql_mode = ''")
+
             # Customize the query based on the selected time frame and data level
             if time_frame == "Weekly":
                 group_by_clause = "WEEK(stat_date)"
@@ -187,6 +190,7 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
     except Exception as e:
         st.error(f"Error: Unable to fetch comparison data from the database. {e}")
         return []
+
 
 
 # Create a Streamlit app
