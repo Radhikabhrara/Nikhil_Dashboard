@@ -198,29 +198,34 @@ if conn is not None:
             fig_app_pie = px.pie(df_app, names="Client Name", values="Values", title="Application Count")
             st.plotly_chart(fig_app_pie)
 
-        if data_level == "Order" or data_level == "ALL":
-            # Example: Display a table from your database - Order Level
-            st.header('Order Level Data')
-            order_data = fetch_order_data(start_date, end_date, conn)
+   
+        if data_level == "API"or data_level == "ALL":
+            st.header('API Level Data')
+            api_data = fetch_api_data(start_date, end_date, conn)  # Assuming you have a function to fetch API data
 
-            # Create a DataFrame for order data
-            df_order = pd.DataFrame(order_data, columns=["Client Name", "Date", "Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"])
+            # Create a DataFrame for API data
+            df_api = pd.DataFrame(api_data, columns=["Client Name", "Date", "API Success count", "API Failure count", "API Error count", "API Total count"])
 
             if filter_data:
                 # Filter data based on the checkbox
-                selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique(), key=f"client_selectbox_{page}")
+                selected_client = st.sidebar.selectbox("Select Client", df_api['Client Name'].unique())
+                df_api = df_api[df_api['Client Name'] == selected_client]
 
-                #selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique())
-                df_order = df_order[df_order['Client Name'] == selected_client]
+            # Display the API data
+            st.write("### API Count Data")
+            st.dataframe(df_api)
 
-            # Display the order data
-            st.write("### Order Count Data")
-            st.dataframe(df_order)
+            # Interactive Bar Chart for API Level
+            st.write("### API level Bar Chart")
+            fig_api = px.bar(df_api, x="Client Name", y=["API Success count", "API Failure count", "API Error count", "API Total count"], title="API Count")
+            st.plotly_chart(fig_api)
 
-            # Interactive Bar Chart for Order Level
-            st.write("### Order level Bar Chart")
-            fig_order = px.bar(df_order, x="Client Name", y=["Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"], title="Order Count")
-            st.plotly_chart(fig_order)
+            # Create a pie chart using Plotly Express for API Level
+            st.write("### API level Pie Chart")
+            df_api['Values'] = df_api[['API Success count', 'API Failure count', 'API Error count', 'API Total count']].sum(axis=1)
+            fig_api_pie = px.pie(df_api, names="Client Name", values="Values", title="API Count")
+            st.plotly_chart(fig_api_pie)
+    
 
             # Create a pie chart using Plotly Express for Order Level
             st.write("### Order level Pie Chart")
@@ -229,32 +234,32 @@ if conn is not None:
             st.plotly_chart(fig_order_pie)
 
 
-        if data_level == "API" or data_level == "ALL":
-            st.header('API Level Data')
-            api_data = fetch_order_data(start_date, end_date, conn)
-            df_api = pd.DataFrame(api_data, columns=["Client Name", "Date", "API Success count", "API Failure count", "API Error count", "API Total count"])
+    if data_level == "API":
+        st.header('API Level Data')
+        api_data = fetch_api_data(start_date, end_date, conn)  # Assuming you have a function to fetch API data
 
-            if filter_data:
-                # Filter data based on the checkbox
-                selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique(), key=f"client_selectbox_{page}")
+        # Create a DataFrame for API data
+        df_api = pd.DataFrame(api_data, columns=["Client Name", "Date", "API Success count", "API Failure count", "API Error count", "API Total count"])
 
-                #selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique())
-                df_api = df_api[df_api['Client Name'] == selected_client]
+        if filter_data:
+            # Filter data based on the checkbox
+            selected_client = st.sidebar.selectbox("Select Client", df_api['Client Name'].unique())
+            df_api = df_api[df_api['Client Name'] == selected_client]
 
-            # Display the order data
-            st.write("### API Count Data")
-            st.dataframe(df_api)
+        # Display the API data
+        st.write("### API Count Data")
+        st.dataframe(df_api)
 
-            # Interactive Bar Chart for Order Level
-            st.write("### API level Bar Chart")
-            fig_api = px.bar(df_api, x="Client Name", y=["API Success count", "API Failure count", "API Error count", "API Total count"], title="Order Count")
-            st.plotly_chart(fig_api)
+        # Interactive Bar Chart for API Level
+        st.write("### API level Bar Chart")
+        fig_api = px.bar(df_api, x="Client Name", y=["API Success count", "API Failure count", "API Error count", "API Total count"], title="API Count")
+        st.plotly_chart(fig_api)
 
-            # Create a pie chart using Plotly Express for Order Level
-            st.write("### API level Pie Chart")
-            df_api['Values'] = df_api[["API Success count", "API Failure count", "API Error count", "API Total count"]].sum(axis=1)
-            fig_api_pie = px.pie(df_api, names="Client Name", values="Values", title="API Count")
-            st.plotly_chart(fig_api_pie)
+        # Create a pie chart using Plotly Express for API Level
+        st.write("### API level Pie Chart")
+        df_api['Values'] = df_api[['API Success count', 'API Failure count', 'API Error count', 'API Total count']].sum(axis=1)
+        fig_api_pie = px.pie(df_api, names="Client Name", values="Values", title="API Count")
+        st.plotly_chart(fig_api_pie)
  
       
     elif page == "Generate Reports":
