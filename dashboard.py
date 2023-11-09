@@ -84,7 +84,7 @@ def fetch_api_data(start_date, end_date, connection):
 def fetch_unique_clients(connection):
     try:
         with connection.cursor() as cursor:
-            query = "SELECT DISTINCT client_name FROM your_table_name;"
+            query = "SELECT DISTINCT client_name FROM aggregate_daily_stats_as_on;"
             cursor.execute(query)
             clients = [row[0] for row in cursor.fetchall()]
         return clients
