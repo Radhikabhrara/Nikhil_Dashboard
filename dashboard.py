@@ -157,74 +157,85 @@ else:
     st.error("Unable to connect to the database.")
 
 
-
-import streamlit as st
+# Import necessary libraries
 import pandas as pd
+import streamlit as st
 import plotly.express as px
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
-# Function to generate reports
-def generate_time_based_reports(data, time_column, values_column):
-    data[time_column] = pd.to_datetime(data[time_column])
-    
-    # Generate weekly, monthly, and quarterly reports
-    weekly_data = data.resample('W-Mon', on=time_column).sum().reset_index()
-    monthly_data = data.resample('M', on=time_column).sum().reset_index()
-    quarterly_data = data.resample('Q', on=time_column).sum().reset_index()
+# Function to fetch data from the MySQL database
+def fetch_data(start_date, end_date, connection, data_level):
+    try:
+        with connection.cursor() as cursor:
+            query = f"""
+                SELECT client_name, stat_date, {data_level}
+                FROM aggregate_daily_stats_as_on
+                WHERE stat_date BETWEEN %s AND %s
+            """
+            cursor.execute(query, (start_date, end_date))
+            data = cursor.fetchall()
+        return data
+    except Exception as e:
+        st.error(f"Error: Unable to fetch data from the database. {e}")
+        return []
 
-    st.write("### Weekly Report")
-    st.dataframe(weekly_data)
+# Function to generate weekly, monthly, and quarterly reports
+def generate_reports(data, data_level, time_period):
+    df = pd.DataFrame(data, columns=["Client Name", "Date", data_level])
 
-    st.write("### Monthly Report")
-    st.dataframe(monthly_data)
+    if time_period == "Weekly":
+        df['Week Start'] = df['Date'] - pd.to_timedelta(df['Date'].dt.dayofweek, unit='d')
+        df['Week End'] = df['Week Start'] + pd.DateOffset(days=6)
 
-    st.write("### Quarterly Report")
-    st.dataframe(quarterly_data)
+        # Group by client and week, summing the values
+        grouped_df = df.groupby(['Client Name', 'Week Start', 'Week End']).sum().reset_index()
 
-    # Interactive Bar Charts
-    st.write("### Weekly Bar Chart")
-    fig_weekly = px.bar(weekly_data, x=time_column, y=values_column, title="Weekly Report")
-    st.plotly_chart(fig_weekly)
+    elif time_period == "Monthly":
+        df['Month'] = df['Date'].dt.to_period('M')
 
-    st.write("### Monthly Bar Chart")
-    fig_monthly = px.bar(monthly_data, x=time_column, y=values_column, title="Monthly Report")
-    st.plotly_chart(fig_monthly)
+        # Group by client and month, summing the values
+        grouped_df = df.groupby(['Client Name', 'Month']).sum().reset_index()
 
-    st.write("### Quarterly Bar Chart")
-    fig_quarterly = px.bar(quarterly_data, x=time_column, y=values_column, title="Quarterly Report")
-    st.plotly_chart(fig_quarterly)
+    elif time_period == "Quarterly":
+        df['Quarter'] = df['Date'].dt.to_period('Q')
 
-# ... (your existing code)
+        # Group by client and quarter, summing the values
+        grouped_df = df.groupby(['Client Name', 'Quarter']).sum().reset_index()
+
+    return grouped_df
 
 # Create a Streamlit app
 st.title("MySQL Database Dashboard")
 
-# Connect to the MySQL database
-conn = create_connection()
+# ... (your existing code)
 
-if conn is not None:
-    # ... (your existing code)
+# Add another page for reports
+if st.sidebar.button("Generate Reports"):
+    st.title("Generate Reports")
 
-    # New Page: Generate Time-based Reports
-    if st.sidebar.button("Generate Time-based Reports"):
-        st.title("Generate Time-based Reports")
+    # Select data level and time period for the report
+    data_level_report = st.selectbox("Select Data Level", ["Application", "Order"])
+    time_period_report = st.selectbox("Select Time Period", ["Weekly", "Monthly", "Quarterly"])
 
-        if data_level == "Application" or data_level == "Both":
-            st.header('Generate Application Time-based Reports')
+    # Fetch data based on selected parameters
+    report_data = fetch_data(start_date, end_date, conn, data_level_report)
 
-            # Generate time-based application reports
-            generate_time_based_reports(df_app, "Date", ["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"])
+    # Generate the report
+    if report_data:
+        report_df = generate_reports(report_data, data_level_report.lower(), time_period_report)
 
-        if data_level == "Order" or data_level == "Both":
-            st.header('Generate Order Time-based Reports')
+        # Display the generated report
+        st.write("### Generated Report")
+        st.dataframe(report_df)
 
-            # Generate time-based order reports
-            generate_time_based_reports(df_order, "Date", ["Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"])
+        # Interactive Bar Chart for the generated report
+        st.write(f"### {time_period_report} Bar Chart")
+        fig_report = px.bar(report_df, x="Client Name", y=data_level_report, color=time_period_report, title=f"{data_level_report} Count")
+        st.plotly_chart(fig_report)
 
-    # Close the database connection
-    conn.close()
-else:
-    st.error("Unable to connect to the database.")
+# ... (continue with the rest of your code)
+
 
 
 
