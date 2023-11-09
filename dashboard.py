@@ -291,7 +291,7 @@ if conn is not None:
         selected_data_level = st.selectbox("Select Data Level", data_level_options)
 
         # Options for time frame selection
-        time_frame_options = ["","Weekly", "Monthly", "Quarterly"]
+        time_frame_options = ["Weekly", "Monthly", "Quarterly"]
         selected_time_frame = st.selectbox("Select Time Frame", time_frame_options)
 
         st.write("### Date Range Filter")
