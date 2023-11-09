@@ -125,8 +125,8 @@ if conn is not None:
         df_app['Values'] = df_app[['Completed Application', 'Approved Applications', 'Yet to Create Applications', 'Rejected Applications']].sum(axis=1)
         fig_app_pie = px.pie(df_app, names="Client Name", values="Values", title="Application Count")
         st.plotly_chart(fig_app_pie)
-
-      if data_level == "Order" or data_level == "Both":
+           
+        if data_level == "Order" or data_level == "Both":
            # Example: Display a table from your database - Order Level
            st.header('Order Level Data')
            order_data = fetch_order_data(start_date, end_date, conn)
@@ -134,7 +134,7 @@ if conn is not None:
            # Create a DataFrame for order data
            df_order = pd.DataFrame(order_data, columns=["Client Name", "Date", "Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"])
 
-       if filter_data:
+        if filter_data:
            # Filter data based on the checkbox
            selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique())
            df_order = df_order[df_order['Client Name'] == selected_client]
