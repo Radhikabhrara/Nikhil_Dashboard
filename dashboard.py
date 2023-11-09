@@ -5,7 +5,6 @@ import plotly.express as px
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
-# Function to fetch data from the MySQL database
 def fetch_data(start_date, end_date, connection, data_level):
     try:
         with connection.cursor() as cursor:
@@ -15,12 +14,15 @@ def fetch_data(start_date, end_date, connection, data_level):
                 FROM aggregate_daily_stats_as_on
                 WHERE stat_date BETWEEN %s AND %s
             """
+            print("Generated Query:", query)  # Add this line for debugging
             cursor.execute(query, (start_date, end_date))
             data = cursor.fetchall()
         return data
     except Exception as e:
         st.error(f"Error: Unable to fetch data from the database. {e}")
         return []
+
+
 
 # Function to generate reports
 def generate_reports(data, data_levels, time_period):
