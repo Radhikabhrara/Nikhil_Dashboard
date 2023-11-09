@@ -390,6 +390,18 @@ if conn is not None:
 
         # Interactive Line Chart for Comparison
         st.write(f"### {selected_time_frame} Comparison")
+        # Assuming df_comparison is your DataFrame
+        fig_comparison = px.line(df_comparison, x="Stat Date", y=df_comparison.columns[2:], line_shape="linear", title=f"{selected_data_level} {selected_time_frame} Comparison")
+
+        # Customize the layout for better clarity
+        fig_comparison.update_layout(
+           legend=dict(title="Variables", orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+           xaxis=dict(title="Stat Date"),
+           yaxis=dict(title="Count"),
+        )
+
+        st.plotly_chart(fig_comparison)
+
         fig_comparison = px.line(df_comparison, x="Stat Date", y=columns[2:], title=f"{selected_data_level} {selected_time_frame} Comparison")
         st.plotly_chart(fig_comparison)
 
