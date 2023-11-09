@@ -260,7 +260,7 @@ if conn is not None:
             df_app = pd.DataFrame(application_data, columns=["Client Name", "Date", "Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"])
 
             if filter_data:
-                selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique(), key="unique_key_for_selectbox")
+                selected_client = st.sidebar.selectbox("Select Application-level Client", df_app['Client Name'].unique(), key="unique_key_for_selectbox")
                 df_app = df_app[df_app['Client Name'] == selected_client]
 
             # Display the application data
@@ -287,7 +287,7 @@ if conn is not None:
             df_order = pd.DataFrame(order_data, columns=["Client Name", "Date", "Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"])
 
             if filter_data:
-                selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique(), key="unique_key_for_order_selectbox")
+                selected_client = st.sidebar.selectbox("Select Order-level Client", df_order['Client Name'].unique(), key="unique_key_for_order_selectbox")
                 df_order = df_order[df_order['Client Name'] == selected_client]
               
 
@@ -315,7 +315,7 @@ if conn is not None:
 
             if filter_data:
                 # Filter data based on the checkbox
-                selected_client = st.sidebar.selectbox("Select Client", df_api['Client Name'].unique(), key="unique_key_for_api_selectbox")
+                selected_client = st.sidebar.selectbox("Select API-level Client", df_api['Client Name'].unique(), key="unique_key_for_api_selectbox")
                 df_api = df_api[df_api['Client Name'] == selected_client]
 
             # Display the API data
