@@ -191,11 +191,10 @@ st.title("AdvaInsights")
 
 # Connect to the MySQL database
 conn = create_connection()
-
+st.sidebar.title("**AdvaInsights Menu**")
+page = st.sidebar.radio("Navigation", ["AdvaInsights", "Customized Insights", "Generate Reports"], index=0)
 if conn is not None:
     # Navigation menu with a default selection of "AdvaInsights"
-    st.sidebar.title("**AdvaInsights Menu**")
-    page = st.sidebar.radio("Navigation", ["AdvaInsights", "Customized Insights", "Generate Reports"], index=0)
 
     if page == "AdvaInsights":
         st.write("**📊 AdvaInsights Overview:**")
