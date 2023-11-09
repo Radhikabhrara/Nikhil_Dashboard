@@ -82,9 +82,12 @@ def fetch_api_data(start_date, end_date, connection):
         return []
 
 
-def fetch_comparison_data(start_date, end_date, data_level, time_frame, connection):
+def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected_client, connection):
     try:
         with connection.cursor() as cursor:
+
+            cursor.execute(query, (start_date, end_date, selected_client))
+            data = cursor.fetchall()
             # Customize the query based on the selected time frame and data level
             if time_frame == "Weekly":
                 group_by_clause = "WEEK(stat_date)"
@@ -92,6 +95,10 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, connecti
                 group_by_clause = "MONTH(stat_date)"
             elif time_frame == "Quarterly":
                 group_by_clause = "QUARTER(stat_date)"
+
+             # Add a condition for the selected client
+            if selected_client:
+                query += "AND client_name = %s"
 
             if data_level == "Application":
                 query = f"""
@@ -288,6 +295,12 @@ if conn is not None:
             start_date = pd.to_datetime("2023-01-01")
         if not end_date:
             end_date = pd.to_datetime("2023-12-31")
+
+       client_options = fetch_unique_clients(conn)  # Assuming you have a function to fetch unique clients from the database
+       selected_client = st.selectbox("Select Client", client_options)
+
+       # Fetch comparison data for the selected client
+       comparison_data = fetch_comparison_data(start_date, end_date, selected_data_level, selected_time_frame, selected_client, conn)
 
         # Fetch comparison data
         comparison_data = fetch_comparison_data(start_date, end_date, selected_data_level, selected_time_frame, conn)
