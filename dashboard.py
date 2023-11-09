@@ -194,8 +194,8 @@ conn = create_connection()
 
 if conn is not None:
     # Navigation menu with a default selection of "AdvaInsights"
-    st.title("**AdvaInsights Menu**")
-    page = st.radio("Navigation", ["AdvaInsights", "Customized Insights", "Generate Reports"], index=0)
+    st.sidebar.title("**AdvaInsights Menu**")
+    page = st.sidebar.radio("Navigation", ["AdvaInsights", "Customized Insights", "Generate Reports"], index=0)
 
     if page == "AdvaInsights":
         st.write("**📊 AdvaInsights Overview:**")
