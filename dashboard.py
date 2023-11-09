@@ -65,6 +65,46 @@ def fetch_order_data(start_date, end_date, connection):
         st.error(f"Error: Unable to fetch order data from the database. {e}")
         return []
 
+def fetch_comparison_data(start_date, end_date, data_level, connection):
+    try:
+        with connection.cursor() as cursor:
+            # Customize the query based on the selected time frame (week, month, quarter)
+            if data_level == "Weekly":
+                query = """
+                    SELECT WEEK(stat_date) as week_number, 
+                           SUM(comp_app_count) as total_comp_app_count, 
+                           SUM(man_order_count) as total_man_order_count
+                    FROM aggregate_daily_stats_as_on
+                    WHERE stat_date BETWEEN %s AND %s
+                    GROUP BY week_number;
+                """
+            elif data_level == "Monthly":
+                query = """
+                    SELECT MONTH(stat_date) as month_number, 
+                           SUM(comp_app_count) as total_comp_app_count, 
+                           SUM(man_order_count) as total_man_order_count
+                    FROM aggregate_daily_stats_as_on
+                    WHERE stat_date BETWEEN %s AND %s
+                    GROUP BY month_number;
+                """
+            elif data_level == "Quarterly":
+                query = """
+                    SELECT QUARTER(stat_date) as quarter_number, 
+                           SUM(comp_app_count) as total_comp_app_count, 
+                           SUM(man_order_count) as total_man_order_count
+                    FROM aggregate_daily_stats_as_on
+                    WHERE stat_date BETWEEN %s AND %s
+                    GROUP BY quarter_number;
+                """
+
+            cursor.execute(query, (start_date, end_date))
+            data = cursor.fetchall()
+        return data
+    except Exception as e:
+        print(f"Error: Unable to fetch comparison data from the database. {e}")
+        return []
+
+
 # Create a Streamlit app
 st.title("AdvaInsights")
 
@@ -159,6 +199,40 @@ if conn is not None:
         # Placeholder for the "Generate Reports" page
         st.title("Generate Reports Page")
         st.write("This page is under construction.")
+        # Options for time frame selection
+        time_frame_options = ["Weekly", "Monthly", "Quarterly"]
+        selected_time_frame = st.selectbox("Select Time Frame", time_frame_options)
+
+        # Dropdown to select data level (application, order, or both)
+        data_level = st.selectbox("Select Data Level", ["", "Application", "Order", "Both"])
+
+        st.write("### Date Range Filter")
+
+        # Date Range Filter
+        start_date = st.date_input("Start Date")
+        end_date = st.date_input("End Date")
+
+        # Default date range for initial data display
+        if not start_date:
+           start_date = pd.to_datetime("2023-01-01")
+        if not end_date:
+           end_date = pd.to_datetime("2023-12-31")
+
+        # Fetch comparison data
+        comparison_data = fetch_comparison_data(start_date, end_date, selected_time_frame, conn)
+
+        # Create a DataFrame for comparison data
+        df_comparison = pd.DataFrame(comparison_data, columns=["Stat Date", "Total Completed Applications", "Total Manual Orders"])
+
+        # Display the comparison data
+        st.write("### Comparison Data")
+        st.dataframe(df_comparison)
+
+        # Interactive Line Chart for Comparison
+        st.write(f"### {selected_time_frame} Comparison")
+        fig_comparison = px.line(df_comparison, x="Stat Date", y=["Total Completed Applications", "Total Manual Orders"], title=f"{selected_time_frame} Comparison")
+        st.plotly_chart(fig_comparison)
+
 
     # Close the database connection
     # conn.close()
