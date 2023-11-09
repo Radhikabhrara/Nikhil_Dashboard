@@ -73,10 +73,13 @@ conn = create_connection()
 
 if conn is not None:
     # Navigation menu
-    page = st.sidebar.radio("Navigation", ["Customized Insights", "Generate Reports"], index=0)
+    st.sidebar.title("AdvaInsights Menu")
+    page = st.sidebar.radio("Navigation", ["AdvaInsights","Customized Insights", "Generate Reports"], index=0)
+    if page =="AdvaInsights":
+        st.write("Under construction")
 
     if page == "Customized Insights":
-        st.sidebar.title("AdvaInsights Menu")
+        
 
         # Dropdown to select data level (application, order, or both)
         data_level = st.sidebar.selectbox("Select Data Level", ["", "Application", "Order", "Both"])
