@@ -72,15 +72,14 @@ st.title("AdvaInsights")
 conn = create_connection()
 
 if conn is not None:
-    # Navigation menu
+    # Navigation menu with a default selection of "AdvaInsights"
     st.sidebar.title("AdvaInsights Menu")
-    page = st.sidebar.radio("Navigation", ["AdvaInsights","Customized Insights", "Generate Reports"], index=0)
-    if page =="AdvaInsights":
+    page = st.sidebar.radio("Navigation", ["AdvaInsights", "Customized Insights", "Generate Reports"], index=0)
+
+    if page == "AdvaInsights":
         st.write("Under construction")
 
-    if page == "Customized Insights":
-        
-
+    elif page == "Customized Insights":
         # Dropdown to select data level (application, order, or both)
         data_level = st.sidebar.selectbox("Select Data Level", ["", "Application", "Order", "Both"])
 
@@ -106,54 +105,53 @@ if conn is not None:
             # Create a DataFrame for application data
             df_app = pd.DataFrame(application_data, columns=["Client Name", "Date", "Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"])
 
-        if filter_data:
-            # Filter data based on the checkbox
-            selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique())
-            df_app = df_app[df_app['Client Name'] == selected_client]
+            if filter_data:
+                # Filter data based on the checkbox
+                selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique())
+                df_app = df_app[df_app['Client Name'] == selected_client]
 
-        # Display the application data
-        st.write("### Application Count Data")
-        st.dataframe(df_app)
+            # Display the application data
+            st.write("### Application Count Data")
+            st.dataframe(df_app)
 
-        # Interactive Bar Chart for Application Level
-        st.write("### Application level Bar Chart")
-        fig_app = px.bar(df_app, x="Client Name", y=["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"], title="Application Count")
-        st.plotly_chart(fig_app)
+            # Interactive Bar Chart for Application Level
+            st.write("### Application level Bar Chart")
+            fig_app = px.bar(df_app, x="Client Name", y=["Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"], title="Application Count")
+            st.plotly_chart(fig_app)
 
-        # Create a pie chart using Plotly Express for Application Level
-        st.write("### Application level Pie Chart")
-        df_app['Values'] = df_app[['Completed Application', 'Approved Applications', 'Yet to Create Applications', 'Rejected Applications']].sum(axis=1)
-        fig_app_pie = px.pie(df_app, names="Client Name", values="Values", title="Application Count")
-        st.plotly_chart(fig_app_pie)
-           
+            # Create a pie chart using Plotly Express for Application Level
+            st.write("### Application level Pie Chart")
+            df_app['Values'] = df_app[['Completed Application', 'Approved Applications', 'Yet to Create Applications', 'Rejected Applications']].sum(axis=1)
+            fig_app_pie = px.pie(df_app, names="Client Name", values="Values", title="Application Count")
+            st.plotly_chart(fig_app_pie)
+
         if data_level == "Order" or data_level == "Both":
-           # Example: Display a table from your database - Order Level
-           st.header('Order Level Data')
-           order_data = fetch_order_data(start_date, end_date, conn)
+            # Example: Display a table from your database - Order Level
+            st.header('Order Level Data')
+            order_data = fetch_order_data(start_date, end_date, conn)
 
-           # Create a DataFrame for order data
-           df_order = pd.DataFrame(order_data, columns=["Client Name", "Date", "Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"])
+            # Create a DataFrame for order data
+            df_order = pd.DataFrame(order_data, columns=["Client Name", "Date", "Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"])
 
-        if filter_data:
-           # Filter data based on the checkbox
-           selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique())
-           df_order = df_order[df_order['Client Name'] == selected_client]
+            if filter_data:
+                # Filter data based on the checkbox
+                selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique())
+                df_order = df_order[df_order['Client Name'] == selected_client]
 
-        # Display the order data
-        st.write("### Order Count Data")
-        st.dataframe(df_order)
+            # Display the order data
+            st.write("### Order Count Data")
+            st.dataframe(df_order)
 
-        # Interactive Bar Chart for Order Level
-        st.write("### Order level Bar Chart")
-        fig_order = px.bar(df_order, x="Client Name", y=["Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"], title="Order Count")
-        st.plotly_chart(fig_order)
+            # Interactive Bar Chart for Order Level
+            st.write("### Order level Bar Chart")
+            fig_order = px.bar(df_order, x="Client Name", y=["Manual Orders", "Auto Orders", "Remaining Orders", "Total Orders"], title="Order Count")
+            st.plotly_chart(fig_order)
 
-        # Create a pie chart using Plotly Express for Order Level
-        st.write("### Order level Pie Chart")
-        df_order['Values'] = df_order[['Manual Orders', 'Auto Orders', 'Remaining Orders', 'Total Orders']].sum(axis=1)
-        fig_order_pie = px.pie(df_order, names="Client Name", values="Values", title="Order Count")
-        st.plotly_chart(fig_order_pie)
-
+            # Create a pie chart using Plotly Express for Order Level
+            st.write("### Order level Pie Chart")
+            df_order['Values'] = df_order[['Manual Orders', 'Auto Orders', 'Remaining Orders', 'Total Orders']].sum(axis=1)
+            fig_order_pie = px.pie(df_order, names="Client Name", values="Values", title="Order Count")
+            st.plotly_chart(fig_order_pie)
 
     elif page == "Generate Reports":
         # Placeholder for the "Generate Reports" page
