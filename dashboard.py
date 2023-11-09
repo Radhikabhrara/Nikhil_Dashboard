@@ -121,7 +121,7 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
 
             if data_level == "Application":
                 query = f"""
-                    SELECT stat_date, 
+                    SELECT stat_date, client_name,
                           SUM(comp_app_count) as total_comp_app_count, 
                           SUM(approv_app_count) as total_approved_app_count,
                           SUM(yet_to_create_app_count) as total_yet_to_create_app_count,
@@ -366,7 +366,7 @@ if conn is not None:
 
         # Define column names based on the selected data level
         if selected_data_level == "Application":
-            columns = ["Stat Date", "Total Completed Applications", "Total Approved Applications", "Total Yet to Create Applications", "Total Rejected Applications"]
+            columns = ["Stat Date","Client Name", "Total Completed Applications", "Total Approved Applications", "Total Yet to Create Applications", "Total Rejected Applications"]
         elif selected_data_level == "Order":
             columns = ["Stat Date", "Total Manual Orders", "Total Auto Orders", "Total Remaining Orders", "Total Total Orders"]
         elif selected_data_level == "API":
