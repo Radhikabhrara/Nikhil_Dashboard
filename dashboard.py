@@ -260,11 +260,7 @@ if conn is not None:
             df_app = pd.DataFrame(application_data, columns=["Client Name", "Date", "Completed Application", "Approved Applications", "Yet to Create Applications", "Rejected Applications"])
 
             if filter_data:
-                # Filter data based on the checkbox
-                widget_id = f"Select Client - {page}"
-                selected_client = st.sidebar.selectbox(widget_id, df_order['Client Name'].unique())
-
-                #selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique(), key="unique_key_for_selectbox")
+                selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique(), key="unique_key_for_selectbox")
                 df_app = df_app[df_app['Client Name'] == selected_client]
 
             # Display the application data
