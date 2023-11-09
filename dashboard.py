@@ -76,7 +76,7 @@ if conn is not None:
     page = st.sidebar.radio("Navigation", ["Customized Insights", "Generate Reports"])
 
     if page == "Customized Insights":
-        st.sidebar.title("AdvaInsights")
+        st.sidebar.title("AdvaInsights Menu")
 
         # Dropdown to select data level (application, order, or both)
         data_level = st.sidebar.selectbox("Select Data Level", ["", "Application", "Order", "Both"])
