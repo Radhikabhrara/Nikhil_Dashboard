@@ -96,9 +96,6 @@ def fetch_unique_clients(connection):
 def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected_client, connection):
     try:
         with connection.cursor() as cursor:
-
-            cursor.execute(query, (start_date, end_date, selected_client))
-            data = cursor.fetchall()
             # Customize the query based on the selected time frame and data level
             if time_frame == "Weekly":
                 group_by_clause = "WEEK(stat_date)"
@@ -106,10 +103,6 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                 group_by_clause = "MONTH(stat_date)"
             elif time_frame == "Quarterly":
                 group_by_clause = "QUARTER(stat_date)"
-
-             # Add a condition for the selected client
-            if selected_client:
-                query += "AND client_name = %s"
 
             if data_level == "Application":
                 query = f"""
@@ -120,7 +113,6 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                           SUM(rejected_app_count) as total_rejected_app_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY stat_date, {group_by_clause};
                 """
             elif data_level == "Order":
                 query = f"""
@@ -131,7 +123,6 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                           SUM(total_order_count) as total_total_order_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY stat_date, {group_by_clause};
                 """
             elif data_level == "API":
                 query = f"""
@@ -142,7 +133,6 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                           SUM(api_total_count) as total_api_total_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY stat_date, {group_by_clause};
                 """
             else:  # Both data levels
                 query = f"""
@@ -161,15 +151,24 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                           SUM(api_total_count) as total_api_total_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY stat_date, {group_by_clause};
                 """
-            cursor.execute(query, (start_date, end_date))
+
+            if selected_client:
+                query += " AND client_name = %s"
+
+            query += f" GROUP BY stat_date, {group_by_clause};"
+
+            if selected_client:
+                cursor.execute(query, (start_date, end_date, selected_client))
+            else:
+                cursor.execute(query, (start_date, end_date))
+
             data = cursor.fetchall()
+
         return data
     except Exception as e:
         st.error(f"Error: Unable to fetch comparison data from the database. {e}")
         return []
-
 
 # Create a Streamlit app
 st.title("AdvaInsights")
