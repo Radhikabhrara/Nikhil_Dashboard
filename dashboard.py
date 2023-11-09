@@ -226,7 +226,7 @@ if conn is not None:
             df_order['Values'] = df_order[['Manual Orders', 'Auto Orders', 'Remaining Orders', 'Total Orders']].sum(axis=1)
             fig_order_pie = px.pie(df_order, names="Client Name", values
 
-        if (data_level == "API") or (data_level == "ALL"):
+        if data_level == "API" or data_level == "ALL":
             st.header('API Level Data')
             api_data = fetch_api_data(start_date, end_date, conn)  # Assuming you have a function to fetch API data
 
