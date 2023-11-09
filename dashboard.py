@@ -129,7 +129,7 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                             SUM(rejected_app_count) as total_rejected_app_count
                       FROM aggregate_daily_stats_as_on
                       WHERE stat_date BETWEEN %s AND %s
-                      GROUP BY stat_date , client_name
+                      GROUP BY stat_date, client_name
                 """
             elif data_level == "Order":
                 query = f"""
@@ -187,6 +187,7 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
     except Exception as e:
         st.error(f"Error: Unable to fetch comparison data from the database. {e}")
         return []
+
 
 # Create a Streamlit app
 st.title("AdvaInsights")
