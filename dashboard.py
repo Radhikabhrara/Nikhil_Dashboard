@@ -234,33 +234,7 @@ if conn is not None:
             st.plotly_chart(fig_order_pie)
 
 
-    if data_level == "API":
-        st.header('API Level Data')
-        api_data = fetch_api_data(start_date, end_date, conn)  # Assuming you have a function to fetch API data
 
-        # Create a DataFrame for API data
-        df_api = pd.DataFrame(api_data, columns=["Client Name", "Date", "API Success count", "API Failure count", "API Error count", "API Total count"])
-
-        if filter_data:
-            # Filter data based on the checkbox
-            selected_client = st.sidebar.selectbox("Select Client", df_api['Client Name'].unique())
-            df_api = df_api[df_api['Client Name'] == selected_client]
-
-        # Display the API data
-        st.write("### API Count Data")
-        st.dataframe(df_api)
-
-        # Interactive Bar Chart for API Level
-        st.write("### API level Bar Chart")
-        fig_api = px.bar(df_api, x="Client Name", y=["API Success count", "API Failure count", "API Error count", "API Total count"], title="API Count")
-        st.plotly_chart(fig_api)
-
-        # Create a pie chart using Plotly Express for API Level
-        st.write("### API level Pie Chart")
-        df_api['Values'] = df_api[['API Success count', 'API Failure count', 'API Error count', 'API Total count']].sum(axis=1)
-        fig_api_pie = px.pie(df_api, names="Client Name", values="Values", title="API Count")
-        st.plotly_chart(fig_api_pie)
- 
       
     elif page == "Generate Reports":
         # Options for data level selection
