@@ -296,13 +296,11 @@ if conn is not None:
         if not end_date:
             end_date = pd.to_datetime("2023-12-31")
 
-       selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique())
+        selected_client = st.sidebar.selectbox("Select Client", df_app['Client Name'].unique())
 
-       # Fetch comparison data for the selected client
-       comparison_data = fetch_comparison_data(start_date, end_date, selected_data_level, selected_time_frame, selected_client, conn)
+        # Fetch comparison data for the selected client
+        comparison_data = fetch_comparison_data(start_date, end_date, selected_data_level, selected_time_frame, selected_client, conn)
 
-        # Fetch comparison data
-        comparison_data = fetch_comparison_data(start_date, end_date, selected_data_level, selected_time_frame, conn)
 
         # Define column names based on the selected data level
         if selected_data_level == "Application":
