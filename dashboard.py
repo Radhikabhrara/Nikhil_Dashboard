@@ -268,59 +268,56 @@ if conn is not None:
             fig_api_pie = px.pie(df_api, names="Client Name", values="Values", title="API Count")
             st.plotly_chart(fig_api_pie)
 
+    elif page == "Generate Reports":
+        # Options for data level selection
+        data_level_options = ["Application", "Order", "API", "All"]
+        selected_data_level = st.selectbox("Select Data Level", data_level_options)
 
-      
-elif page == "Generate Reports":
-    # Options for data level selection
-    data_level_options = ["Application", "Order", "API", "All"]
-    selected_data_level = st.selectbox("Select Data Level", data_level_options)
+        # Options for time frame selection
+        time_frame_options = ["Weekly", "Monthly", "Quarterly"]
+        selected_time_frame = st.selectbox("Select Time Frame", time_frame_options)
 
-    # Options for time frame selection
-    time_frame_options = ["Weekly", "Monthly", "Quarterly"]
-    selected_time_frame = st.selectbox("Select Time Frame", time_frame_options)
+        st.write("### Date Range Filter")
 
-    st.write("### Date Range Filter")
+        # Date Range Filter
+        start_date = st.date_input("Start Date")
+        end_date = st.date_input("End Date")
 
-    # Date Range Filter
-    start_date = st.date_input("Start Date")
-    end_date = st.date_input("End Date")
+        # Default date range for initial data display
+        if not start_date:
+            start_date = pd.to_datetime("2023-01-01")
+        if not end_date:
+            end_date = pd.to_datetime("2023-12-31")
 
-    # Default date range for initial data display
-    if not start_date:
-        start_date = pd.to_datetime("2023-01-01")
-    if not end_date:
-        end_date = pd.to_datetime("2023-12-31")
+        # Fetch comparison data
+        comparison_data = fetch_comparison_data(start_date, end_date, selected_data_level, selected_time_frame, conn)
 
-    # Fetch comparison data
-    comparison_data = fetch_comparison_data(start_date, end_date, selected_data_level, selected_time_frame, conn)
+        # Define column names based on the selected data level
+        if selected_data_level == "Application":
+            columns = ["Stat Date", "Total Completed Applications", "Total Approved Applications", "Total Yet to Create Applications", "Total Rejected Applications"]
+        elif selected_data_level == "Order":
+            columns = ["Stat Date", "Total Manual Orders", "Total Auto Orders", "Total Remaining Orders", "Total Total Orders"]
+        elif selected_data_level == "API":
+            columns = ["Stat Date", "Total API Success", "Total API Failure", "Total API Error", "Total API Total"]
+        else:
+            columns = [
+                "Stat Date",
+                "Total Completed Applications", "Total Approved Applications", "Total Yet to Create Applications", "Total Rejected Applications",
+                "Total Manual Orders", "Total Auto Orders", "Total Remaining Orders", "Total Total Orders",
+                "Total API Success", "Total API Failure", "Total API Error", "Total API Total"
+            ]
 
-    # Define column names based on the selected data level
-    if selected_data_level == "Application":
-        columns = ["Stat Date", "Total Completed Applications", "Total Approved Applications", "Total Yet to Create Applications", "Total Rejected Applications"]
-    elif selected_data_level == "Order":
-        columns = ["Stat Date", "Total Manual Orders", "Total Auto Orders", "Total Remaining Orders", "Total Total Orders"]
-    elif selected_data_level == "API":
-        columns = ["Stat Date", "Total API Success", "Total API Failure", "Total API Error", "Total API Total"]
-    else:
-        columns = [
-            "Stat Date",
-            "Total Completed Applications", "Total Approved Applications", "Total Yet to Create Applications", "Total Rejected Applications",
-            "Total Manual Orders", "Total Auto Orders", "Total Remaining Orders", "Total Total Orders",
-            "Total API Success", "Total API Failure", "Total API Error", "Total API Total"
-        ]
+        # Create a DataFrame for comparison data
+        df_comparison = pd.DataFrame(comparison_data, columns=columns)
 
-    # Create a DataFrame for comparison data
-    df_comparison = pd.DataFrame(comparison_data, columns=columns)
+        # Display the comparison data
+        st.write("### Comparison Data")
+        st.dataframe(df_comparison)
 
-    # Display the comparison data
-    st.write("### Comparison Data")
-    st.dataframe(df_comparison)
-
-    # Interactive Line Chart for Comparison
-    st.write(f"### {selected_time_frame} Comparison")
-    fig_comparison = px.line(df_comparison, x="Stat Date", y=columns[1:], title=f"{selected_data_level} {selected_time_frame} Comparison")
-    st.plotly_chart(fig_comparison)
-
+        # Interactive Line Chart for Comparison
+        st.write(f"### {selected_time_frame} Comparison")
+        fig_comparison = px.line(df_comparison, x="Stat Date", y=columns[1:], title=f"{selected_data_level} {selected_time_frame} Comparison")
+        st.plotly_chart(fig_comparison)
 
     # Close the database connection
     # conn.close()
