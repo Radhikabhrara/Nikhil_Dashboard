@@ -65,6 +65,23 @@ def fetch_order_data(start_date, end_date, connection):
         st.error(f"Error: Unable to fetch order data from the database. {e}")
         return []
 
+# Function to fetch application data from the MySQL database
+def fetch_api_data(start_date, end_date, connection):
+    try:
+        with connection.cursor() as cursor:
+            query = """
+                SELECT client_name, stat_date, api_success_count, api_failure_count, api_error_count, api_total_count
+                FROM aggregate_daily_stats_as_on
+                WHERE stat_date BETWEEN %s AND %s
+            """
+            cursor.execute(query, (start_date, end_date))
+            data = cursor.fetchall()
+        return data
+    except Exception as e:
+        st.error(f"Error: Unable to fetch application data from the database. {e}")
+        return []
+
+
 def fetch_comparison_data(start_date, end_date, data_level, time_frame, connection):
     try:
         with connection.cursor() as cursor:
@@ -137,7 +154,7 @@ if conn is not None:
 
     elif page == "Customized Insights":
         # Dropdown to select data level (application, order, or both)
-        data_level = st.sidebar.selectbox("Select Data Level", ["", "Application", "Order", "Both"])
+        data_level = st.sidebar.selectbox("Select Data Level", ["", "Application", "Order","API", "ALL"])
 
         st.sidebar.write("### Date Range Filter")
 
@@ -155,7 +172,7 @@ if conn is not None:
         # Checkbox to filter data
         filter_data = st.sidebar.checkbox("Filter Data")
 
-        if data_level == "Application" or data_level == "Both":
+        if data_level == "Application" or data_level == "ALL":
             st.header('Application Level Data')
             application_data = fetch_application_data(start_date, end_date, conn)
             # Create a DataFrame for application data
@@ -181,7 +198,7 @@ if conn is not None:
             fig_app_pie = px.pie(df_app, names="Client Name", values="Values", title="Application Count")
             st.plotly_chart(fig_app_pie)
 
-        if data_level == "Order" or data_level == "Both":
+        if data_level == "Order" or data_level == "ALL":
             # Example: Display a table from your database - Order Level
             st.header('Order Level Data')
             order_data = fetch_order_data(start_date, end_date, conn)
@@ -211,6 +228,33 @@ if conn is not None:
             fig_order_pie = px.pie(df_order, names="Client Name", values="Values", title="Order Count")
             st.plotly_chart(fig_order_pie)
 
+
+        if data_level == "API" or data_level == "ALL":
+            st.header('API Level Data')
+            api_data = fetch_order_data(start_date, end_date, conn)
+            df_api = pd.DataFrame(order_data, columns=["Client Name", "Date", "API Success count", "API Failure count", "API Error count", "API Total count"])
+
+            if filter_data:
+                # Filter data based on the checkbox
+                selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique(), key=f"client_selectbox_{page}")
+
+                #selected_client = st.sidebar.selectbox("Select Client", df_order['Client Name'].unique())
+                df_api = df_api[df_api['Client Name'] == selected_client]
+
+            # Display the order data
+            st.write("### API Count Data")
+            st.dataframe(df_api)
+
+            # Interactive Bar Chart for Order Level
+            st.write("### API level Bar Chart")
+            fig_api = px.bar(df_api, x="Client Name", y=["API Success count", "API Failure count", "API Error count", "API Total count"], title="Order Count")
+            st.plotly_chart(fig_api)
+
+            # Create a pie chart using Plotly Express for Order Level
+            st.write("### API level Pie Chart")
+            df_api['Values'] = df_api[["API Success count", "API Failure count", "API Error count", "API Total count"]].sum(axis=1)
+            fig_api_pie = px.pie(df_api, names="Client Name", values="Values", title="API Count")
+            st.plotly_chart(fig_api_pie)
  
       
     elif page == "Generate Reports":
