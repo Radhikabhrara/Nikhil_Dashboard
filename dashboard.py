@@ -197,7 +197,7 @@ if conn is not None:
     # Navigation menu with a default selection of "AdvaInsights"
 
     if page == "AdvaInsights":
-        st.write("**📊 AdvaInsights Overview:**")
+        st.title("**📊 AdvaInsights Overview:**")
         st.write("*Under construction, exciting updates coming soon!*")
 
   
