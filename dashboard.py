@@ -129,7 +129,7 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                             SUM(rejected_app_count) as total_rejected_app_count
                       FROM aggregate_daily_stats_as_on
                       WHERE stat_date BETWEEN %s AND %s
-                      GROUP BY stat_date, client_name
+                      GROUP BY stat_date
                 """
             elif data_level == "Order":
                 query = f"""
@@ -140,7 +140,7 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                           SUM(total_order_count) as total_total_order_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY stat_date, client_name 
+                    GROUP BY stat_date
                 """
             elif data_level == "API":
                 query = f"""
@@ -151,7 +151,7 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                           SUM(api_total_count) as total_api_total_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY stat_date, client_name
+                    GROUP BY stat_date
                 """
             else:  # Both data levels
                 query = f"""
@@ -170,7 +170,7 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                           SUM(api_total_count) as total_api_total_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
-                    GROUP BY stat_date, client_name 
+                    GROUP BY stat_date
                 """
 
             if selected_client:
@@ -368,14 +368,14 @@ if conn is not None:
 
         # Define column names based on the selected data level
         if selected_data_level == "Application":
-            columns = ["Stat Date", "Total Completed Applications", "Total Approved Applications", "Total Yet to Create Applications", "Total Rejected Applications"]
+            columns = ["Stat Date","Client", "Total Completed Applications", "Total Approved Applications", "Total Yet to Create Applications", "Total Rejected Applications"]
         elif selected_data_level == "Order":
-            columns = ["Stat Date", "Total Manual Orders", "Total Auto Orders", "Total Remaining Orders", "Total Total Orders"]
+            columns = ["Stat Date","Client", "Total Manual Orders", "Total Auto Orders", "Total Remaining Orders", "Total Total Orders"]
         elif selected_data_level == "API":
-            columns = ["Stat Date", "Total API Success", "Total API Failure", "Total API Error", "Total API Total"]
+            columns = ["Stat Date","Client", "Total API Success", "Total API Failure", "Total API Error", "Total API Total"]
         else:
             columns = [
-                "Stat Date",
+                "Stat Date","Client",
                 "Total Completed Applications", "Total Approved Applications", "Total Yet to Create Applications", "Total Rejected Applications",
                 "Total Manual Orders", "Total Auto Orders", "Total Remaining Orders", "Total Total Orders",
                 "Total API Success", "Total API Failure", "Total API Error", "Total API Total"
@@ -390,7 +390,7 @@ if conn is not None:
 
         # Interactive Line Chart for Comparison
         st.write(f"### {selected_time_frame} Comparison")
-        fig_comparison = px.line(df_comparison, x="Stat Date", y=columns[1:], title=f"{selected_data_level} {selected_time_frame} Comparison")
+        fig_comparison = px.line(df_comparison, x="Stat Date", y=columns[2:], title=f"{selected_data_level} {selected_time_frame} Comparison")
         st.plotly_chart(fig_comparison)
 
     # Close the database connection
