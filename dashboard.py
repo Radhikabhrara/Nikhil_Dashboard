@@ -154,7 +154,7 @@ if conn is not None:
 
     elif page == "Customized Insights":
         # Dropdown to select data level (application, order, or both)
-        data_level = st.sidebar.selectbox("Select Data Level", ["", "Application", "Order","API", "ALL"])
+        data_level = st.sidebar.selectbox("Select Data Level", ["","API", "Application", "Order","ALL"])
 
         st.sidebar.write("### Date Range Filter")
 
@@ -232,7 +232,7 @@ if conn is not None:
         if data_level == "API" or data_level == "ALL":
             st.header('API Level Data')
             api_data = fetch_order_data(start_date, end_date, conn)
-            df_api = pd.DataFrame(order_data, columns=["Client Name", "Date", "API Success count", "API Failure count", "API Error count", "API Total count"])
+            df_api = pd.DataFrame(api_data, columns=["Client Name", "Date", "API Success count", "API Failure count", "API Error count", "API Total count"])
 
             if filter_data:
                 # Filter data based on the checkbox
