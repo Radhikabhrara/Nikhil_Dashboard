@@ -91,8 +91,7 @@ def fetch_unique_clients(connection):
     except Exception as e:
         st.error(f"Error: Unable to fetch unique clients from the database. {e}")
         return []
-
-
+           
 def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected_client, connection):
     try:
         with connection.cursor() as cursor:
@@ -169,6 +168,7 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
     except Exception as e:
         st.error(f"Error: Unable to fetch comparison data from the database. {e}")
         return []
+
 
 # Create a Streamlit app
 st.title("AdvaInsights")
