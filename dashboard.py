@@ -139,6 +139,7 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                           SUM(total_order_count) as total_total_order_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
+                    GROUP BY stat_date
                 """
             elif data_level == "API":
                 query = f"""
@@ -149,6 +150,7 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                           SUM(api_total_count) as total_api_total_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
+                    GROUP BY stat_date
                 """
             else:  # Both data levels
                 query = f"""
@@ -167,12 +169,13 @@ def fetch_comparison_data(start_date, end_date, data_level, time_frame, selected
                           SUM(api_total_count) as total_api_total_count
                     FROM aggregate_daily_stats_as_on
                     WHERE stat_date BETWEEN %s AND %s
+                    GROUP BY stat_date
                 """
 
             if selected_client:
                 query += " AND client_name = %s"
 
-            query += f" GROUP BY stat_date, client_name;"
+            
 
             if selected_client:
                 cursor.execute(query, (start_date, end_date, selected_client))
