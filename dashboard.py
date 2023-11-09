@@ -370,7 +370,7 @@ if conn is not None:
 
         # Define column names based on the selected data level
         if selected_data_level == "Application":
-            columns = ["Stat Date","Client Name", "Total Completed Applications", "Total Approved Applications", "Total Yet to Create Applications", "Total Rejected Applications"]
+            columns = ["Stat Date", "Total Completed Applications", "Total Approved Applications", "Total Yet to Create Applications", "Total Rejected Applications"]
         elif selected_data_level == "Order":
             columns = ["Stat Date", "Total Manual Orders", "Total Auto Orders", "Total Remaining Orders", "Total Total Orders"]
         elif selected_data_level == "API":
