@@ -205,7 +205,7 @@ if conn is not None:
 
     if page == "AdvaInsights":
         st.title("**📊 AdvaInsights Overview:**")
-        st.write("*Under construction, exciting updates coming soon!*")
+        #st.write("*Under construction, exciting updates coming soon!*")
 
   
         st.title("**🎨 Customized Insights**")
