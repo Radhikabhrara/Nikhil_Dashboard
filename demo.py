@@ -3,8 +3,8 @@ import streamlit.components.v1 as components
 import pandas as pd
 
 # Adding Image to web app
-st.set_page_config(page_title="Nik",layout="wide",initial_sidebar_state="auto")
-st.title("Nikhil_Dashboard")
+st.set_page_config(page_title="radz",layout="wide",initial_sidebar_state="auto")
+st.title("Demo_Dashboard")
 
 hide_default_format = """
        <style>
